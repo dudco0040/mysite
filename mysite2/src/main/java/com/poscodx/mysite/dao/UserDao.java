@@ -50,5 +50,36 @@ public class UserDao {
 
 		return result;		
 	}
+
+
+	public UserVo findByNoAndPassword(String email, String password) {
+		UserVo result = null;
+
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select no, name from user where email = ? and password = password(?)");
+			) {
+			
+			// binding
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+			
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				Long no = rs.getLong(1);
+				String name = rs.getString(2);
+				
+				result = new UserVo();
+				result.setNo(no);
+				result.setName(name);
+				
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Error:" + e);
+		}
+
+		return result;	
+	}
 	
 }
