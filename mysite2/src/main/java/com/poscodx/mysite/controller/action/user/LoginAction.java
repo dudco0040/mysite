@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.poscodx.mysite.controller.ActionServlet.Action;
 import com.poscodx.mysite.dao.UserDao;
@@ -31,6 +32,11 @@ public class LoginAction implements Action {
 		}
 		
 		// login 처리 
+		HttpSession session = request.getSession(true);   // JSID 추출? true: 없으면 생성 -> false: 없으면 만들지 않음(our)
+		session.setAttribute("authUser", authUser);
+		
+		// login 후 메인 화면으로 리다이렉트
+		response.sendRedirect(request.getContextPath());
 	}
 
 }
