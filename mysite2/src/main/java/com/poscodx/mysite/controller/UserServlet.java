@@ -21,7 +21,9 @@ public class UserServlet extends ActionServlet {
 		"joinsuccess", new JoinSuccess(),
 		"loginform", new LoginFormAction(),
 		"login", new LoginAction(),
-		"logout", new LogoutAction()
+		"logout", new LogoutAction(),
+		"updateform", new UpdateFormAction(),
+		"update", new UpdateAction()
 	);
 			
 	
