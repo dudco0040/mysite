@@ -4,21 +4,39 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<display-name>mysite2</display-name>
+
+	<!-- Context Parameter -->
+	<context-param>
+		<param-name>contextConfigLoaction</param-name>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
+	</context-param>
+	<!-- Context Load Listener -->
+	<listener>
+		<listener-class>com.poscodx.mysite.web.ConTextLoadListener</listener-class>
+	</listener>
 	
-	<!-- Encodinf Filter -->
+	<!-- Encoding Filter -->
 	<filter>
 		<filter-name>EncodingFilter</filter-name>
 		<filter-class>com.poscodx.mysite.web.EncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>EncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	<!-- Servlet Mappings -->
+
+	<!-- Servlets -->
 	<servlet>
 		<servlet-name>MainServlet</servlet-name>
 		<servlet-class>com.poscodx.mysite.controller.MainServlet</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/servlet-context.xml</param-value>
+		</init-param>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>MainServlet</servlet-name>
@@ -28,7 +46,6 @@
 		<servlet-name>MainServlet</servlet-name>
 		<url-pattern>/main</url-pattern>
 	</servlet-mapping>
-
 	<servlet>
 		<description></description>
 		<display-name>UserServlet</display-name>
@@ -39,7 +56,6 @@
 		<servlet-name>UserServlet</servlet-name>
 		<url-pattern>/user</url-pattern>
 	</servlet-mapping>
-
 	<servlet>
 		<description></description>
 		<display-name>GuestBookServlet</display-name>
@@ -50,7 +66,6 @@
 		<servlet-name>GuestBookServlet</servlet-name>
 		<url-pattern>/guestbook</url-pattern>
 	</servlet-mapping>
-
 	<servlet>
 		<description></description>
 		<display-name>BoardServlet</display-name>
@@ -62,7 +77,7 @@
 		<url-pattern>/board</url-pattern>
 	</servlet-mapping>
 
-	<!-- Common Error Page -->
+	<!-- Error Page -->
 	<error-page>
 		<error-code>400</error-code>
 		<location>/WEB-INF/views/errors/400.jsp</location>
@@ -76,7 +91,7 @@
 		<location>/WEB-INF/views/errors/500.jsp</location>
 	</error-page>
 
-	<!-- Default Files -->
+	<!-- Default Pages -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -85,5 +100,4 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-
 </web-app>
