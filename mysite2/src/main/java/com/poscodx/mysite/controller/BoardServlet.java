@@ -3,6 +3,7 @@ package com.poscodx.mysite.controller;
 import java.util.Map;
 
 import com.poscodx.mysite.controller.action.board.BoardAction;
+import com.poscodx.mysite.controller.action.board.DeleteAction;
 import com.poscodx.mysite.controller.action.board.ModifyAction;
 import com.poscodx.mysite.controller.action.board.ModifyFormAction;
 import com.poscodx.mysite.controller.action.board.ViewAction;
@@ -16,7 +17,7 @@ public class BoardServlet extends ActionServlet {
 			"writeform", new WriteFormAction(),
 			"write", new WriteAction(),
 //			"list", new ListAction(),
-//			"delete", new DeleteAction(),
+			"delete", new DeleteAction(),
 			"view", new ViewAction(),
 			"modifyform", new ModifyFormAction(),
 			"modify", new ModifyAction()
@@ -26,5 +27,6 @@ public class BoardServlet extends ActionServlet {
 	@Override
 	protected Action getAction(String actionName) {
 		return mapAction.getOrDefault(actionName, new BoardAction());
+		// list 
 	}
 }
