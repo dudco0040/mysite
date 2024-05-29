@@ -18,7 +18,7 @@
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
-				
+					
 				<!-- findAll 결과 목록으로 보기  -->
 				<table class="tbl-ex">
 					<tr>
@@ -28,30 +28,24 @@
 						<th>조회수</th>
 						<th>작성일</th>
 						<th>&nbsp;</th>
-					</tr>		
-					<tr>
-						<td>3</td>
-						<td>
-							<td><a href="">${vo.title }</a></td>
-						<td>${vo.name }</td>
-						<td>${vo.hit }</td>
-						<td>${vo.regDate }</td>
-						<td><a href="" class="del">삭제</a></td>
 					</tr>
+					<!-- forEach -->
+					<c:set var="count" value="${fn:length(list) }" />
+					<c:forEach items="${list }" var="vo" varStatus="status" >
+						<tr>
+							<td>${vo.no }</td>
+							<td><a href="${pageContext.request.contextPath}/board?a=view&no=${vo.no}" method="post">${vo.title }</a></td>
+							<td>${vo.userName }</td>
+							<td>${vo.hit }</td>
+							<td>${vo.regDate }</td>
+							<td><a href="" class="del">삭제</a></td>
+						</tr>
+					</c:forEach>
 				</table>
 				
 				
-				<!-- 기존 코드 -->
-				<table class="tbl-ex">
-					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>글쓴이</th>
-						<th>조회수</th>
-						<th>작성일</th>
-						<th>&nbsp;</th>
-					</tr>		
-					<tr>
+				<!-- 기존 코드 -->	
+					<!-- <tr>
 						<td>3</td>
 						<td style="text-align:left; pasdding-left:${20*vo.depth }20px">
 							<img src='${pageContext.request.contextPath}/assets/images/reply.png'>
@@ -81,9 +75,7 @@
 						<td>2015-09-25 07:24:32</td>
 						<td><a href="" class="del">삭제</a></td>
 					</tr>
-				</table>
-				
-				
+				</table> -->	
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
@@ -98,7 +90,7 @@
 				</div>					
 				<!-- pager 추가 -->
 				<div class="bottom">
-					<a href="" id="new-book">글쓰기</a>
+					<a href="${pageContext.request.contextPath}/board?a=writeform" method="post" id="new-book">글쓰기</a>
 				</div>				
 			</div>
 		</div>
