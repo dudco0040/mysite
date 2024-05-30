@@ -38,44 +38,13 @@
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<td><a href="" class="del">삭제</a></td>
+							<c:if test="${not empty authUser}">
+								<td><a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}" class="del">삭제</a></td>
+							</c:if>
 						</tr>
 					</c:forEach>
 				</table>
-				
-				
-				<!-- 기존 코드 -->	
-					<!-- <tr>
-						<td>3</td>
-						<td style="text-align:left; pasdding-left:${20*vo.depth }20px">
-							<img src='${pageContext.request.contextPath}/assets/images/reply.png'>
-							<td><a href="">세 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-11 12:04:20</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td style="text-align:left:${20*vo.depth }20px">
-							<img src='${pageContext.request.contextPath}/assets/images/reply.png'>
-							<a href="">두 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-02 12:04:12</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td style="text-align:left:${20*vo.depth }20px">
-							<img src='${pageContext.request.contextPath}/assets/images/reply.png'>
-							<td><a href="">첫 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-09-25 07:24:32</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-				</table> -->	
+					
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
@@ -89,9 +58,13 @@
 					</ul>
 				</div>					
 				<!-- pager 추가 -->
-				<div class="bottom">
-					<a href="${pageContext.request.contextPath}/board?a=writeform" method="post" id="new-book">글쓰기</a>
-				</div>				
+				
+				<!-- 회원인 경우만 bottom을 표시 -->
+				<c:if test="${not empty authUser}">
+					<div class="bottom">
+						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE&no=${vo.no}" method="post" id="new-book">글쓰기</a>
+					</div>
+				</c:if>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />

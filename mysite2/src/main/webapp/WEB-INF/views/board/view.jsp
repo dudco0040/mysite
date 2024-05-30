@@ -12,7 +12,7 @@
 <body>
 	<div id="container">
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
-		<c:set var="vo" value="${content}" />
+		<c:set var="vo" value="${vo}" />
 		<div id="content">
 			<div id="board" class="board-form">
 				<table class="tbl-ex">
@@ -34,8 +34,11 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath}/board">글목록</a>
-					<a href="${pageContext.request.contextPath}/board?a=modifyform&no=${vo.no }">글수정</a>
+					<a href="${pageContext.request.contextPath}/board">글목록</a>				
+					<c:if test="${not empty authUser}">
+						<a href="${pageContext.request.contextPath}/board?a=modifyform&no=${vo.no}&title=${vo.title}&contents=${fn:escapeXml(vo.contents)}">글수정</a>
+						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=TRUE&no=${vo.no}" method="post" id="new-book">답글달기</a>	<!-- &reply=TRUE -->
+					</c:if>
 				</div>
 			</div>
 		</div>

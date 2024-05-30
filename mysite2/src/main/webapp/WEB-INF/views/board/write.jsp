@@ -15,10 +15,27 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board"> <!-- ?a=write -->
-					<input type = "hidden" name = "a" value="write">
+					<c:choose>
+						<c:when test="${isReply}">
+							<input type="hidden" name="a" value="reply">
+							<input type="hidden" name="no" value="${vo.no} ">
+						</c:when>
+						<c:otherwise>
+							<input type="hidden" name="a" value="write">
+						</c:otherwise>
+					</c:choose>
+					<input type = "hidden" name = "reply" value="${isReply}">  <!-- reply T/F -->
 					<table class="tbl-ex">
+						
 						<tr>
-							<th colspan="2">글쓰기</th>
+							<c:choose>
+								<c:when test="${isReply}">
+									<th colspan="2">답글쓰기</th>
+								</c:when>
+								<c:otherwise>
+									<th colspan="2">글쓰기</th>
+								</c:otherwise>
+							</c:choose>
 						</tr>
 						<tr>
 							<td class="label">제목</td>

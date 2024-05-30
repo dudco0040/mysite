@@ -17,6 +17,7 @@ public class WriteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("글쓰기~~");
 		HttpSession session = request.getSession();
 			System.out.println("session: " + session);
 	      // Access Control
