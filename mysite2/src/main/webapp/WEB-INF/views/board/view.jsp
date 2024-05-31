@@ -37,7 +37,6 @@
 					<a href="${pageContext.request.contextPath}/board">글목록</a>				
 					<c:if test="${not empty authUser}">
 						<a href="${pageContext.request.contextPath}/board?a=modifyform&no=${vo.no}&title=${vo.title}&contents=${fn:escapeXml(vo.contents)}">글수정</a>
-						<c:set var="no" value="${vo.no}" />
 						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=TRUE&no=${vo.no}" method="post" id="new-book">답글달기</a>	<!-- &reply=TRUE -->
 					</c:if>
 				</div>

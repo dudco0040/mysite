@@ -64,6 +64,51 @@ public class BoardDao {
 
 
 	// 글 보기(view)
+	public BoardVo findByTitleAndUsernoView(Long no) {
+		BoardVo result = null;
+
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select title, contents, g_no, o_no, depth, user_no from board where no = ?");
+//					"select a.title, a.contents"
+//					+ " from board a, user b"
+//					+ " where a.user_no = b.no"
+//					+ " and a.no = ?");
+			) {
+
+			// binding
+			pstmt.setLong(1, no);
+
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				// no는 input으로 받은 값을 저장
+				String viewTitle = rs.getString(1);
+				String contents = rs.getString(2);
+				
+				
+				// 기능에 따라 필요한 값만 vo에 저장하기 
+				// 1) 글 보기  : no, title, contents
+				result = new BoardVo();
+				result.setNo(no);
+				result.setTitle(viewTitle);
+				result.setContents(contents);
+//				result.setgNo(g_no);
+//				result.setoNo(o_no);
+//				result.setDepth(depth);
+				// result.setUserNo(user_no);
+				//System.out.println("[View] no: " + no + " Title: " + viewTitle + "  Contents: " + contents + "  g_no: " + g_no + "  o_no: " + o_no + "  depth: " + depth + "  userNo: " + user_no);
+				System.out.println(result);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Error:" + e);
+		}
+
+		return result;
+	}
+	
+	
+	// 본문 가져오기(reply)
 	public BoardVo findByTitleAndUserno(Long no) {
 		BoardVo result = null;
 
@@ -88,16 +133,19 @@ public class BoardDao {
 				Long o_no = rs.getLong(4);
 				Long depth = rs.getLong(5);
 				Long user_no = rs.getLong(6);
-
+				
+				
+				// 기능에 따라 필요한 값만 vo에 저장하기 
+				// 1) 답글 달기" : no, g_no, o_no, depth
 				result = new BoardVo();
 				result.setNo(no);
-				result.setTitle(viewTitle);
-				result.setContents(contents);
+				// result.setTitle(viewTitle);
+				// result.setContents(contents);
 				result.setgNo(g_no);
 				result.setoNo(o_no);
 				result.setDepth(depth);
-				result.setUserNo(user_no);
-				System.out.println("[View] no: " + no + " Title: " + viewTitle + "  Contents: " + contents + "  g_no: " + g_no + "  o_no: " + o_no + "  depth: " + depth + "  userNo: " + user_no);
+				// result.setUserNo(user_no);
+				//System.out.println("[View] no: " + no + " Title: " + viewTitle + "  Contents: " + contents + "  g_no: " + g_no + "  o_no: " + o_no + "  depth: " + depth + "  userNo: " + user_no);
 				System.out.println(result);
 			}
 			rs.close();
@@ -233,11 +281,15 @@ public class BoardDao {
 	// 답글 달기 
 	public int reply(BoardVo vo) {
 		int result = 0;
-
+		
+		// vo로 받은 값을 update
+		// g_no = g_no
+		// o_no = o_no + 1
+		// depth = depth + 1
+		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt1 = conn.prepareStatement("INSERT INTO board (title, contents, hit, reg_date, g_no, o_no, depth, user_no) "
-					+ "SELECT ?, ?, 0, NOW(), IFNULL(MAX(g_no), 0) + 1, 1, 0, ? FROM board");
+			PreparedStatement pstmt1 = conn.prepareStatement("insert into board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) values(?, ?, 0, now(), ?, ?, ?, ?)");
 			PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from dual");
 			) {
 
@@ -246,7 +298,10 @@ public class BoardDao {
 			// param 작성한 제목과 글
 			pstmt1.setString(1, vo.getTitle());
 			pstmt1.setString(2, vo.getContents());
-			pstmt1.setLong(3, vo.getUserNo());
+			pstmt1.setLong(3, vo.getgNo());
+			pstmt1.setLong(4, vo.getoNo()+1);
+			pstmt1.setLong(5, vo.getDepth()+1);
+			pstmt1.setLong(6, vo.getUserNo());
 
 
 			result = pstmt1.executeUpdate();
