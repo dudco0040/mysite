@@ -225,7 +225,7 @@ public class BoardDao {
 
 			//3. Statement 준비
 			String sql =
-					"select a.no, a.title, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %H:%i:%s') from board a, user b where a.user_no = b.no";
+					"select a.no, a.title, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %H:%i:%s'), a.depth from board a, user b where a.user_no = b.no";
 
 					//"select no, name, password, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as reg_date from guestbook order by reg_date desc";   // 실제 보여지는 것과 필요한 것...
 			pstmt = conn.prepareStatement(sql);
@@ -240,6 +240,7 @@ public class BoardDao {
 				String user_name = rs.getString(3);
 				Long hit = rs.getLong(4);
 				String reg_date = rs.getString(5);
+				Long depth = rs.getLong(6);
 
 				// vo를 생성
 				BoardVo vo = new BoardVo();
@@ -248,6 +249,7 @@ public class BoardDao {
 				vo.setUserName(user_name);   //vo에는 userNo를 넣어줘야 함
 				vo.setHit(hit);
 				vo.setRegDate(reg_date);
+				vo.setDepth(depth);
 
 //				System.out.println(no + " " + title + " " + title + " " + user_name + " " + reg_date);
 				result.add(vo);
