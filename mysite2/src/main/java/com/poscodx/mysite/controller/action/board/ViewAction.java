@@ -23,7 +23,6 @@ public class ViewAction implements Action{
 		
 		request.setAttribute("authUser", authUser);
 		String no = request.getParameter("no");
-
 		request.setAttribute("vo", new BoardDao().findByTitleAndUserno(Long.parseLong(no)));  // Title(글 제목), User Name(글쓴이)
 		request
 			.getRequestDispatcher("/WEB-INF/views/board/view.jsp")

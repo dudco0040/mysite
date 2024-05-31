@@ -18,7 +18,7 @@
 					<c:choose>
 						<c:when test="${isReply}">
 							<input type="hidden" name="a" value="reply">
-							<input type="hidden" name="no" value="${vo.no} ">
+							<input type="hidden" name="no" value="${no} ">
 						</c:when>
 						<c:otherwise>
 							<input type="hidden" name="a" value="write">

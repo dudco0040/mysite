@@ -43,7 +43,8 @@ public class WriteReplyAction implements Action {
 	    	response.sendRedirect(request.getContextPath());
 	        return;
 	    }
-	      
+	     
+	    // 가져온 값을 가지고 insert 해버리기
 		System.out.println("authUser: " + authUser);
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");

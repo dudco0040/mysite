@@ -30,6 +30,7 @@
 						<th>&nbsp;</th>
 					</tr>
 					<!-- forEach -->
+					<!-- 답글이면 들여쓰기 + 아이콘 넣기, 조건: 공백 * depth만큼 곱하기 -->
 					<c:set var="count" value="${fn:length(list) }" />
 					<c:forEach items="${list }" var="vo" varStatus="status" >
 						<tr>
@@ -62,7 +63,7 @@
 				<!-- 회원인 경우만 bottom을 표시 -->
 				<c:if test="${not empty authUser}">
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE&no=${vo.no}" method="post" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE" method="post" id="new-book">글쓰기</a>
 					</div>
 				</c:if>
 			</div>
