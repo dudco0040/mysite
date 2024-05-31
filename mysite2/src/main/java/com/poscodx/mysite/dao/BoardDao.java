@@ -225,7 +225,7 @@ public class BoardDao {
 
 			//3. Statement 준비
 			String sql =
-					"select a.no, a.title, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %H:%i:%s'), a.depth from board a, user b where a.user_no = b.no";
+					"select a.no, a.title, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %H:%i:%s'), a.depth from board a, user b where a.user_no = b.no order by g_no desc, o_no asc";
 
 					//"select no, name, password, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as reg_date from guestbook order by reg_date desc";   // 실제 보여지는 것과 필요한 것...
 			pstmt = conn.prepareStatement(sql);
@@ -285,12 +285,14 @@ public class BoardDao {
 		int result = 0;
 		
 		// vo로 받은 값을 update
-		// g_no = g_no
-		// o_no = o_no + 1
-		// depth = depth + 1
+		 Long UpdateGNo = vo.getgNo();
+		 Long UpdateONo = vo.getoNo()+1;
+		 Long UpdateDepth = vo.getDepth()+1;
 		
 		try (
 			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("update board set o_no=?+1 where g_no=? and o_no>?");
+			
 			PreparedStatement pstmt1 = conn.prepareStatement("insert into board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) values(?, ?, 0, now(), ?, ?, ?, ?)");
 			PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from dual");
 			) {
@@ -298,14 +300,20 @@ public class BoardDao {
 			System.out.println("[Dao vo] " + vo.getTitle() + vo.getContents() + vo.getgNo() + vo.getUserNo());
 			// binding
 			// param 작성한 제목과 글
+			// update
+			pstmt.setLong(1, vo.getoNo());
+			pstmt.setLong(2, vo.getgNo());
+			pstmt.setLong(3, vo.getoNo());
+			
+			// insert
 			pstmt1.setString(1, vo.getTitle());
 			pstmt1.setString(2, vo.getContents());
-			pstmt1.setLong(3, vo.getgNo());
-			pstmt1.setLong(4, vo.getoNo()+1);
-			pstmt1.setLong(5, vo.getDepth()+1);
+			pstmt1.setLong(3, UpdateGNo);
+			pstmt1.setLong(4, UpdateONo);
+			pstmt1.setLong(5, UpdateDepth);
 			pstmt1.setLong(6, vo.getUserNo());
 
-
+			result = pstmt.executeUpdate();
 			result = pstmt1.executeUpdate();
 
 			ResultSet rs = pstmt2.executeQuery();
@@ -315,6 +323,26 @@ public class BoardDao {
 			System.out.println("Error:" + e);
 		}
 
+		return result;
+	}
+
+	// 조회수
+	public int updateHit(long no) {
+		int result = 0;
+		try (
+				Connection conn = getConnection();
+				PreparedStatement pstmt = conn.prepareStatement("UPDATE board SET hit = hit + 1 WHERE no = ?");
+			) {
+
+			//4. binding
+			pstmt.setLong(1, no);
+
+			//5. SQL 실행
+			result = pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 

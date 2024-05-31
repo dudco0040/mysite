@@ -23,6 +23,10 @@ public class ViewAction implements Action{
 		
 		request.setAttribute("authUser", authUser);
 		String no = request.getParameter("no");
+		
+		// 조회수 기능 추가 글 번호 비교해서 hit+=1
+		new BoardDao().updateHit(Long.parseLong(no));
+		System.out.println("++조회수");
 		request.setAttribute("vo", new BoardDao().findByTitleAndUsernoView(Long.parseLong(no)));  // Title(글 제목), User Name(글쓴이)
 		request
 			.getRequestDispatcher("/WEB-INF/views/board/view.jsp")
