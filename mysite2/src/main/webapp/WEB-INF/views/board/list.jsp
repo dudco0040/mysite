@@ -52,47 +52,6 @@
 									class="del">삭제</a></td>
 							</c:if>
 						</tr>
-
-						<!--
-						<c:choose>
-							<c:when test="${vo.depth == 0}">
-								<tr>
-									<td>${vo.no }</td>
-									<td></td>
-									<td><a
-										href="${pageContext.request.contextPath}/board?a=view&no=${vo.no}"
-										method="post">${vo.title }</a></td>
-									<td>${vo.userName }</td>
-									<td>${vo.hit }</td>
-									<td>${vo.regDate }</td>
-									<c:if test="${not empty authUser}">
-										<td><a
-											href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}"
-											class="del">삭제</a></td>
-									</c:if>
-								</tr>
-							</c:when>
-							<c:otherwise>
-								<c:set var="padding" value="${20 * vo.depth}" />
-								<tr>
-									<td>${vo.no }</td>
-									<td style="text-align:left; padding-left:${padding}px"><img
-										src='${pageContext.request.contextPath}/assets/images/reply.png'>
-									<td><a
-										href="${pageContext.request.contextPath}/board?a=view&no=${vo.no}"
-										method="post">${vo.title }</a></td>
-									<td>${vo.userName }</td>
-									<td>${vo.hit }</td>
-									<td>${vo.regDate }</td>
-									<c:if test="${not empty authUser}">
-										<td><a
-											href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}"
-											class="del">삭제</a></td>
-									</c:if>
-								</tr>
-							</c:otherwise>
-						</c:choose>
-						  -->
 					</c:forEach>
 				</table>
 
