@@ -84,6 +84,7 @@ public class BoardDao {
 				// no는 input으로 받은 값을 저장
 				String viewTitle = rs.getString(1);
 				String contents = rs.getString(2);
+				Long userNo = rs.getLong(6);
 				
 				
 				// 기능에 따라 필요한 값만 vo에 저장하기 
@@ -95,7 +96,7 @@ public class BoardDao {
 //				result.setgNo(g_no);
 //				result.setoNo(o_no);
 //				result.setDepth(depth);
-				// result.setUserNo(user_no);
+				result.setUserNo(userNo);
 				//System.out.println("[View] no: " + no + " Title: " + viewTitle + "  Contents: " + contents + "  g_no: " + g_no + "  o_no: " + o_no + "  depth: " + depth + "  userNo: " + user_no);
 				System.out.println(result);
 			}
@@ -164,7 +165,7 @@ public class BoardDao {
 
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("update board set title = ?, contents = ? where no = ?");
+			PreparedStatement pstmt = conn.prepareStatement("update board set title = ?, contents = ?, reg_date=now() where no = ?");
 			) {
 
 			// binding
@@ -225,7 +226,7 @@ public class BoardDao {
 
 			//3. Statement 준비
 			String sql =
-					"select a.no, a.title, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %H:%i:%s'), a.depth from board a, user b where a.user_no = b.no order by g_no desc, o_no asc";
+					"select a.no, a.title, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %H:%i:%s'), a.depth, a.user_no from board a, user b where a.user_no = b.no order by g_no desc, o_no asc";
 
 					//"select no, name, password, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as reg_date from guestbook order by reg_date desc";   // 실제 보여지는 것과 필요한 것...
 			pstmt = conn.prepareStatement(sql);
@@ -241,6 +242,7 @@ public class BoardDao {
 				Long hit = rs.getLong(4);
 				String reg_date = rs.getString(5);
 				Long depth = rs.getLong(6);
+				Long user_no = rs.getLong(7);
 
 				// vo를 생성
 				BoardVo vo = new BoardVo();
@@ -249,7 +251,8 @@ public class BoardDao {
 				vo.setUserName(user_name);   //vo에는 userNo를 넣어줘야 함
 				vo.setHit(hit);
 				vo.setRegDate(reg_date);
-				vo.setDepth(depth);
+				vo.setDepth(depth);		// 답글 
+				vo.setUserNo(user_no);  // authUser와 비교 
 
 //				System.out.println(no + " " + title + " " + title + " " + user_name + " " + reg_date);
 				result.add(vo);

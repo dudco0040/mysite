@@ -16,7 +16,6 @@ public class ModifyAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		System.out.println("session: " + session);
 		// Access Control
 		if(session == null) {
 			response.sendRedirect(request.getContextPath());
@@ -36,8 +35,6 @@ public class ModifyAction implements Action {
 		String content = request.getParameter("content");
 		String no = request.getParameter("no");   // no를 값을 넘겨 받아야함 
 		System.out.println("(update param) title:" + title + " contents: " + content);
-		
-		
 
 		vo.setTitle(title);
 		vo.setContents(content);
