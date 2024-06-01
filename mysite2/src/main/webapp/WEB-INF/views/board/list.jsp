@@ -17,8 +17,8 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="" method="post">
-					<input type="text" id="kwd" name="kwd" value=""> <input
-						type="submit" value="찾기">
+					<input type="text" id="kwd" name="kwd" value=""> 
+					<input type="submit" value="찾기">
 				</form>
 
 				<!-- findAll 결과 목록으로 보기  -->
@@ -47,17 +47,42 @@
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<c:if test="${not empty authUser and vo.userNo==authUser.no}">
-								<td><a
-									href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}"
-									class="del">삭제</a></td>
+								<td><a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}" class="del">삭제</a></td>
 							</c:if>
 						</tr>
 					</c:forEach>
 				</table>
-
-				<!-- pager 추가 -->
+				
+			<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
+						<!-- 이전 페이지 링크 -->
+						<c:if test="${currentPage > 1}">
+							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage - 1}">◀</a></li>
+						</c:if>
+						<!-- 페이지 번호 링크 -->
+						<c:forEach var="i" begin="1" end="${totalPages}">
+							<c:choose>
+								<c:when test="${i == currentPage}">
+									<li class="selected">${i}</li>
+								</c:when>
+								<c:otherwise>
+									<li><a href="${pageContext.request.contextPath}/board?page=${i}">${i}</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						<!-- 다음 페이지 링크 -->
+						<c:if test="${currentPage < totalPages}">
+							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage + 1}">▶</a></li>
+						</c:if>
+					</ul>
+				</div>
+				
+				
+				<!-- pager 추가
+				<div class="pager">
+					<ul>
+						<!-- 기존 페이지 번호 
 						<li><a href="">◀</a></li>
 						<li><a href="">1</a></li>
 						<li class="selected">2</li>
@@ -67,7 +92,7 @@
 						<li><a href="">▶</a></li>
 					</ul>
 				</div>
-				<!-- pager 추가 -->
+				pager 추가 -->
 
 				<!-- 회원인 경우만 bottom을 표시 -->
 				<c:if test="${not empty authUser}">

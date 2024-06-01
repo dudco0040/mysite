@@ -6,6 +6,7 @@ import com.poscodx.mysite.controller.action.board.BoardAction;
 import com.poscodx.mysite.controller.action.board.DeleteAction;
 import com.poscodx.mysite.controller.action.board.ModifyAction;
 import com.poscodx.mysite.controller.action.board.ModifyFormAction;
+import com.poscodx.mysite.controller.action.board.PageAction;
 import com.poscodx.mysite.controller.action.board.ViewAction;
 import com.poscodx.mysite.controller.action.board.WriteAction;
 import com.poscodx.mysite.controller.action.board.WriteFormAction;
@@ -22,6 +23,7 @@ public class BoardServlet extends ActionServlet {
 			"modifyform", new ModifyFormAction(),
 			"modify", new ModifyAction(),
 			"reply", new WriteReplyAction()
+			//"page", new PageAction()
 	);
 			
 	
