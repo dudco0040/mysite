@@ -17,26 +17,24 @@ public class WriteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("글쓰기~~");
-		HttpSession session = request.getSession();
-			System.out.println("session: " + session);
-	      // Access Control
-	      if(session == null) {
-	         response.sendRedirect(request.getContextPath());
-	         return;
-	      }
-	      
-	      UserVo authUser = (UserVo) session.getAttribute("authUser");
-	      if (authUser==null) {
-	         response.sendRedirect(request.getContextPath());
-	         return;
-	      }
-	      
-		System.out.println("authUser: " + authUser);
+		// System.out.println("글쓰기~~");
 		
+		// Access Control
+		HttpSession session = request.getSession();
+			//System.out.println("session: " + session);
+	      	if(session == null) {
+	      		response.sendRedirect(request.getContextPath());
+	      		return;
+	      	}
+	      	UserVo authUser = (UserVo) session.getAttribute("authUser");
+	      	if (authUser==null) {
+	      		response.sendRedirect(request.getContextPath());
+	      		return;
+	      	}
+		
+	    // 글 작성(제목, 내용)
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-	
 		System.out.println("[param] " + "title:" + title + "   contents: " + content);
 		
 		BoardVo vo = new BoardVo();
@@ -45,7 +43,7 @@ public class WriteAction implements Action {
 		vo.setUserNo(authUser.getNo());
 		new BoardDao().insert(vo);
 		
-
+		// Redirection
 		response.sendRedirect(request.getContextPath() + "/board");
 		
 	}

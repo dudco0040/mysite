@@ -13,14 +13,14 @@ public class WriteFormAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 댓글인지 답글인지 확인 
+		// 본문인지 답글인지 확인 
         String reply = request.getParameter("reply");
         boolean isReply = "TRUE".equalsIgnoreCase(reply);
         String no = request.getParameter("no");
         System.out.println("reply(y/n): " + isReply);
         System.out.println("no:" + no);  // null 값이 들어와도 넘겨주고 안쓰면 되잖아 
         
-        // 댓글/ 답글 나누기
+        // 본문/답글 나누기
         // "isReply"로 전달 
         request.setAttribute("isReply", isReply);
         request.setAttribute("no", no);  // null 일 경우 Long.parseLong(no) 변환이 안되서 문제 ~

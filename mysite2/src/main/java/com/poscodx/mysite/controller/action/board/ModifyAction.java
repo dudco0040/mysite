@@ -33,15 +33,15 @@ public class ModifyAction implements Action {
 
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		String no = request.getParameter("no");   // no를 값을 넘겨 받아야함 
+		String no = request.getParameter("no"); 
 		System.out.println("(update param) title:" + title + " contents: " + content);
 
 		vo.setTitle(title);
 		vo.setContents(content);
 		vo.setNo(Long.parseLong(no));
-		vo.setUserNo(authUser.getNo());
+		vo.setUserNo(authUser.getNo());  // 본인만 수정 가능해야 함 
 		
-		
+		// update
 		new BoardDao().update(vo);
 
 		response.sendRedirect(request.getContextPath()+"/board");

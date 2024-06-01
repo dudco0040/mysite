@@ -34,7 +34,8 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath}/board">글목록</a>				
+					<a href="${pageContext.request.contextPath}/board">글목록</a>
+					<!-- 비회원 기능 제한 -->			
 					<c:if test="${not empty authUser}">
 						<c:if test="${vo.userNo==authUser.no}">					
 							<a href="${pageContext.request.contextPath}/board?a=modifyform&no=${vo.no}&title=${vo.title}&contents=${fn:escapeXml(vo.contents)}">글수정</a>

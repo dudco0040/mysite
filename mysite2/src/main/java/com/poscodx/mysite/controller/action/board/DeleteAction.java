@@ -15,9 +15,10 @@ public class DeleteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		System.out.println("session: " + session);
 		// Access Control
+		HttpSession session = request.getSession();
+		// System.out.println("session: " + session);
+		
 		if(session == null) {
 			response.sendRedirect(request.getContextPath());
 			return;
@@ -32,10 +33,7 @@ public class DeleteAction implements Action {
 		
 		// 화면 이동 없이 SQL 만 실행
 		String no = request.getParameter("no");
-		System.out.println(no);
-//		request.setAttribute(no, no);
-//		BoardDao boarddao = new BoardDao();
-//		boarddao.delete(Long.parseLong(no));
+		// System.out.println("delete [" + no + "]");
 		new BoardDao().delete(Long.parseLong(no), authUser.getNo());
 		
 		// redirection

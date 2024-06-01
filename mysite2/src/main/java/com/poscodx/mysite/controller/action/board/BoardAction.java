@@ -24,9 +24,9 @@ public class BoardAction implements Action {
 		System.out.println("list");
 	
 		
-		// 페이지 구현
-		// 현재 페이지 번호 받아오기 (default: 1)
-	    int currentPage = 1;
+		// for 페이지 구현
+		// 현재 페이지 번호 받아오기
+	    int currentPage = 1;  // 기본 페이지는 1부터(default)
 	    if (request.getParameter("page") != null) {
 	        currentPage = Integer.parseInt(request.getParameter("page"));
 	    }
@@ -35,33 +35,25 @@ public class BoardAction implements Action {
 	    int recordsPerPage = 5;
 	    // 전체 글의 개수 
 	    BoardDao boardDao = new BoardDao();
-	    int totalRecords = boardDao.findAll().size();
-	    System.out.println(totalRecords);
-	    
-	    
-	    
+	    int totalRecords = boardDao.countRecords();
+	    // System.out.println(totalRecords);
+	    // 글 목록 - 전체 페이지 수
 	    List<BoardVo> list = boardDao.getList((currentPage - 1) * recordsPerPage, recordsPerPage);
-
 	    int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
-
-	    
 	    
 		// 전체 게시물 반환 & 회원 정보
-//		request.setAttribute("list", boardDao.findAll());
+//		request.setAttribute("list", boardDao.findAll());  // getList()로 새로 구현
 		request.setAttribute("authUser", authUser);
 		
-		// 페이지 구현 (현재 페이지, 전체 페이지 수)
+		// 페이지 구현을 위한 변수 전달 (글 목록, 현재 페이지, 전체 페이지 수)
 		request.setAttribute("list", list);
 		request.setAttribute("currentPage", currentPage);
 	    request.setAttribute("totalPages", totalPages);
 		
-		
-		
-		
+
 		request
 			.getRequestDispatcher("/WEB-INF/views/board/list.jsp")
-			.forward(request, response);
-		
+			.forward(request, response);	
 	}
 
 }

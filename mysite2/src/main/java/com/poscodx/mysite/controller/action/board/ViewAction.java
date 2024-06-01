@@ -15,18 +15,16 @@ public class ViewAction implements Action{
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// session
+		// 회원 확인
 		HttpSession session = request.getSession();		
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
-//		System.out.println("session: " + session);
-//		System.out.println("authUser: " + authUser);
-		
-		request.setAttribute("authUser", authUser);
-		String no = request.getParameter("no");
 		
 		// 조회수 기능 추가 글 번호 비교해서 hit+=1
+		String no = request.getParameter("no");
 		new BoardDao().updateHit(Long.parseLong(no));
-		System.out.println("++조회수");
+		// System.out.println("++조회수");
+		
+		request.setAttribute("authUser", authUser);
 		request.setAttribute("vo", new BoardDao().findByTitleAndUsernoView(Long.parseLong(no)));  // Title(글 제목), User Name(글쓴이)
 		request
 			.getRequestDispatcher("/WEB-INF/views/board/view.jsp")

@@ -17,7 +17,7 @@ public class BoardDao {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 
-			String url = "jdbc:mariadb://192.168.0.6:3306/webdb?charset=utf8";
+			String url = "jdbc:mariadb://192.168.0.202:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
@@ -70,10 +70,6 @@ public class BoardDao {
 		try (
 			Connection conn = getConnection();
 			PreparedStatement pstmt = conn.prepareStatement("select title, contents, g_no, o_no, depth, user_no from board where no = ?");
-//					"select a.title, a.contents"
-//					+ " from board a, user b"
-//					+ " where a.user_no = b.no"
-//					+ " and a.no = ?");
 			) {
 
 			// binding
@@ -116,10 +112,6 @@ public class BoardDao {
 		try (
 			Connection conn = getConnection();
 			PreparedStatement pstmt = conn.prepareStatement("select title, contents, g_no, o_no, depth, user_no from board where no = ?");
-//					"select a.title, a.contents"
-//					+ " from board a, user b"
-//					+ " where a.user_no = b.no"
-//					+ " and a.no = ?");
 			) {
 
 			// binding
@@ -140,8 +132,6 @@ public class BoardDao {
 				// 1) 답글 달기" : no, g_no, o_no, depth
 				result = new BoardVo();
 				result.setNo(no);
-				// result.setTitle(viewTitle);
-				// result.setContents(contents);
 				result.setgNo(g_no);
 				result.setoNo(o_no);
 				result.setDepth(depth);
@@ -205,84 +195,8 @@ public class BoardDao {
 
 		return result;
 	}
-
-
-
-	// 조회
-	public List<BoardVo> findAll() {
-		List<BoardVo> result = new ArrayList<>();
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			//1. JDBC Driver 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
-
-			//2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.6:3306/webdb?charset=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-
-			//3. Statement 준비
-			String sql =
-					"select a.no, a.title, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %H:%i:%s'), a.depth, a.user_no from board a, user b where a.user_no = b.no order by g_no desc, o_no asc";
-
-					//"select no, name, password, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as reg_date from guestbook order by reg_date desc";   // 실제 보여지는 것과 필요한 것...
-			pstmt = conn.prepareStatement(sql);
-
-			//5. SQL 실행
-			rs = pstmt.executeQuery();
-
-			//6. 결과 처리
-			while(rs.next()) {
-				Long no = rs.getLong(1);
-				String title = rs.getString(2);
-				String user_name = rs.getString(3);
-				Long hit = rs.getLong(4);
-				String reg_date = rs.getString(5);
-				Long depth = rs.getLong(6);
-				Long user_no = rs.getLong(7);
-
-				// vo를 생성
-				BoardVo vo = new BoardVo();
-				vo.setNo(no);
-				vo.setTitle(title);
-				vo.setUserName(user_name);   //vo에는 userNo를 넣어줘야 함
-				vo.setHit(hit);
-				vo.setRegDate(reg_date);
-				vo.setDepth(depth);		// 답글 
-				vo.setUserNo(user_no);  // authUser와 비교 
-
-//				System.out.println(no + " " + title + " " + title + " " + user_name + " " + reg_date);
-				result.add(vo);
-
-			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-
-				if(pstmt != null) {
-					pstmt.close();
-				}
-
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return result;
-	}
-
+	
+	
 	// 답글 달기 
 	public int reply(BoardVo vo) {
 		int result = 0;
@@ -349,6 +263,29 @@ public class BoardDao {
 		return result;
 	}
 
+	// 전체 글 개수 구하기
+	public int countRecords() {
+	    int count = 0;
+	    try (
+	            Connection conn = getConnection();
+	            PreparedStatement pstmt = conn.prepareStatement("select count(*) from board");
+	            ResultSet rs = pstmt.executeQuery();  // ResultSet 객체 생성
+	        ) {
+
+	        // ResultSet에서 count 값 추출
+	        if (rs.next()) {
+	            count = rs.getInt(1);  // 첫 번째 컬럼의 값을 가져옴
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return count;
+	}
+
+	
+	
+	// List
 	public List<BoardVo> getList(int offset, int limit) {
 	    List<BoardVo> result = new ArrayList<>();
 
@@ -389,19 +326,8 @@ public class BoardDao {
 				vo.setDepth(depth);		// 답글 
 				vo.setUserNo(user_no);  
 
-//				System.out.println(no + " " + title + " " + title + " " + user_name + " " + reg_date);
 				result.add(vo);
-            	
-            	
-//                BoardVo vo = new BoardVo();
-//                vo.setNo(rs.getLong("no"));
-//                vo.setTitle(rs.getString("title"));
-//                vo.setUserName(rs.getString("userName"));
-//                vo.setHit(rs.getLong("hit"));
-//                vo.setRegDate(rs.getString("regDate"));
-//                vo.setDepth(rs.getLong("depth"));
-//                vo.setUserNo(rs.getLong("user_no"));
-//                result.add(vo);  // result 에 추가 
+
             }
 	        
 	    } catch (SQLException e) {
@@ -409,5 +335,7 @@ public class BoardDao {
 	    }
 	    return result;
 	}
+	
+	
 
 }
