@@ -10,6 +10,13 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.request.contextPath}/assets/css/board.css"
 	rel="stylesheet" type="text/css">
+<style>
+    .pager .disabled {
+        color: #ccc; /* 회색으로 표시 */
+        pointer-events: none; /* 클릭할 수 없게 함 */
+        cursor: default;
+    }
+</style>	
 </head>
 <body>
 	<div id="container">
@@ -60,17 +67,41 @@
 						<c:if test="${currentPage > 1}">
 							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage - 1}">◀</a></li>
 						</c:if>
+						<!-- 페이지 번호 세팅 -->
+	       				<c:set var="startPage" value="${((currentPage - 1) / 5) * 5 + 1}" />
+     					<c:set var="endPage" value="${startPage + 4}" />  		
+							
+						<c:if test="${endPage > totalPages}">
+							<c:set var = "endPage" value="${totalPages}" />
+						</c:if>
+						<!-- 정수로 변환 -->
+				        <fmt:parseNumber var="startPageInt" value="${startPage}" type="number" integerOnly="true"/>
+				        <fmt:parseNumber var="endPageInt" value="${endPage}" type="number" integerOnly="true"/>
+
 						<!-- 페이지 번호 링크 -->
-						<c:forEach var="i" begin="1" end="${totalPages}">
+						<c:forEach var="i" begin="${startPage}" end="${endPage}">
 							<c:choose>
 								<c:when test="${i == currentPage}">
 									<li class="selected">${i}</li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="${pageContext.request.contextPath}/board?page=${i}">${i}</a></li>
+								
+									<c:if test="${i <= totalPages}">
+										<li><a href="${pageContext.request.contextPath}/board?page=${i}">${i}</a></li>
+									</c:if>
+									<c:if test="${i > totalPages}">
+										<li class="disabled">${i}</li>
+									</c:if>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
+						
+						<!-- 빈 페이지 출력하기 -->
+						<!-- 없는 페이지는 흐리게 표시하기 -->
+						<c:forEach var="i" begin="${endPage + 1}" end="${startPage + 4}">
+						    <li class="disabled">${i}</li>
+						</c:forEach>
+						
 						<!-- 다음 페이지 링크 -->
 						<c:if test="${currentPage < totalPages}">
 							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage + 1}">▶</a></li>
