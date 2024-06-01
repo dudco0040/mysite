@@ -26,9 +26,9 @@
 					<tr>
 						<td class="label">내용</td>
 						<td>
-							<div class="view-content">
-								${vo.contents } <!-- 줄 바꿈이 있으면 표시 해줘야함 -->
-								
+							<div class="view-content" colspan=4><pre style="white-space: pre-wrap;">
+								<!-- ${vo.contents } <!-- 줄 바꿈이 있으면 표시 해줘야함 -->
+								<pre style="white-space: pre-wrap;">${vo.contents }
 							</div>
 						</td>
 					</tr>
