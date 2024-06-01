@@ -17,7 +17,7 @@ public class BoardDao {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 
-			String url = "jdbc:mariadb://192.168.0.202:3306/webdb?charset=utf8";
+			String url = "jdbc:mariadb://192.168.0.6:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
@@ -221,7 +221,7 @@ public class BoardDao {
 			Class.forName("org.mariadb.jdbc.Driver");
 
 			//2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.202:3306/webdb?charset=utf8";
+			String url = "jdbc:mariadb://192.168.0.6:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 
 			//3. Statement 준비
@@ -347,6 +347,67 @@ public class BoardDao {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public List<BoardVo> getList(int offset, int limit) {
+	    List<BoardVo> result = new ArrayList<>();
+
+	    String sql = "select a.no, a.title, a.user_no, b.name, a.hit, date_format(a.reg_date, '%Y/%m/%d %h:%i:%s'), a.g_no, a.o_no, a.depth "
+	    		+ "from board a, user b "
+	    		+ "where a.user_no = b.no "
+	    		+ "order by a.g_no desc, o_no asc "
+	    		+ "limit ?, ?";
+	    		
+	    try (Connection conn = getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        
+	        pstmt.setInt(1, offset);
+	        pstmt.setInt(2, limit);
+
+	        ResultSet rs = pstmt.executeQuery();
+	        		
+            while (rs.next()) {
+            	Long no = rs.getLong(1);
+				String title = rs.getString(2);
+				Long user_no = rs.getLong(3);
+				String user_name = rs.getString(4);
+				Long hit = rs.getLong(5);
+				String reg_date = rs.getString(6);
+				Long g_no = rs.getLong(7);
+				Long o_no = rs.getLong(8);
+				Long depth = rs.getLong(9);
+
+				// vo를 생성
+				BoardVo vo = new BoardVo();
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setUserName(user_name);   //vo에는 userNo를 넣어줘야 함
+				vo.setHit(hit);
+				vo.setRegDate(reg_date);
+				vo.setgNo(g_no);
+				vo.setoNo(o_no);
+				vo.setDepth(depth);		// 답글 
+				vo.setUserNo(user_no);  
+
+//				System.out.println(no + " " + title + " " + title + " " + user_name + " " + reg_date);
+				result.add(vo);
+            	
+            	
+//                BoardVo vo = new BoardVo();
+//                vo.setNo(rs.getLong("no"));
+//                vo.setTitle(rs.getString("title"));
+//                vo.setUserName(rs.getString("userName"));
+//                vo.setHit(rs.getLong("hit"));
+//                vo.setRegDate(rs.getString("regDate"));
+//                vo.setDepth(rs.getLong("depth"));
+//                vo.setUserNo(rs.getLong("user_no"));
+//                result.add(vo);  // result 에 추가 
+            }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return result;
 	}
 
 }
