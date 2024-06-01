@@ -68,12 +68,24 @@
 							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage - 1}">◀</a></li>
 						</c:if>
 						<!-- 페이지 번호 세팅 -->
-	       				<c:set var="startPage" value="${((currentPage - 1) / 5) * 5 + 1}" />
-     					<c:set var="endPage" value="${startPage + 4}" />  		
-							
+	       				<c:set var="startPage" value="${currentPage-2}" /> <!-- ((currentPage - 1) / 5) * 5 + 1 -->
+     					<c:set var="endPage" value="${currentPage+2}" />  <!-- startPage + 4 -->
+						<!-- 	
 						<c:if test="${endPage > totalPages}">
 							<c:set var = "endPage" value="${totalPages}" />
 						</c:if>
+						 -->
+						<c:if test="${startPage < 1}">
+							<c:set var="startPage" value="1" />
+							<c:set var="endPage" value="5" />
+						</c:if>
+						<c:if test="${endPage > totalPages}">
+							<c:set var="endPage" value="${totalPages}" />
+							<c:if test="${endPage - 4 > 0}">
+								<c:set var="startPage" value="${endPage - 4}" />
+							</c:if>
+						</c:if>
+												
 						<!-- 정수로 변환 -->
 				        <fmt:parseNumber var="startPageInt" value="${startPage}" type="number" integerOnly="true"/>
 				        <fmt:parseNumber var="endPageInt" value="${endPage}" type="number" integerOnly="true"/>
@@ -109,21 +121,6 @@
 					</ul>
 				</div>
 				
-				
-				<!-- pager 추가
-				<div class="pager">
-					<ul>
-						<!-- 기존 페이지 번호 
-						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
-					</ul>
-				</div>
-				pager 추가 -->
 
 				<!-- 회원인 경우만 bottom을 표시 -->
 				<c:if test="${not empty authUser}">
