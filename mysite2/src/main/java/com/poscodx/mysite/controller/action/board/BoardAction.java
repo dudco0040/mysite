@@ -32,7 +32,7 @@ public class BoardAction implements Action {
 	    }
 	    
 	    // 한 페이지당 보여줄 글의 개수
-	    int recordsPerPage = 5;
+	    int recordsPerPage = 8;
 	    // 전체 글의 개수 
 	    BoardDao boardDao = new BoardDao();
 	    int totalRecords = boardDao.countRecords();
