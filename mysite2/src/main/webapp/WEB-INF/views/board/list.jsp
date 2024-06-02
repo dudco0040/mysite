@@ -68,13 +68,13 @@
 							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage - 1}">◀</a></li>
 						</c:if>
 						<!-- 페이지 번호 세팅 -->
-	       				<c:set var="startPage" value="${currentPage-2}" /> <!-- ((currentPage - 1) / 5) * 5 + 1 -->
-     					<c:set var="endPage" value="${currentPage+2}" />  <!-- startPage + 4 -->
-						<!-- 	
+	       				<c:set var="startPage" value="${currentPage-2}" />
+     					<c:set var="endPage" value="${currentPage+2}" />
+							
 						<c:if test="${endPage > totalPages}">
 							<c:set var = "endPage" value="${totalPages}" />
 						</c:if>
-						 -->
+						
 						<c:if test="${startPage < 1}">
 							<c:set var="startPage" value="1" />
 							<c:set var="endPage" value="5" />
