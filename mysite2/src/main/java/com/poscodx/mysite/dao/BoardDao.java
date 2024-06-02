@@ -208,7 +208,7 @@ public class BoardDao {
 		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("update board set o_no=?+1 where g_no=? and o_no>?");
+			PreparedStatement pstmt = conn.prepareStatement("update board set o_no=o_no+1 where g_no=? and o_no>?");
 			
 			PreparedStatement pstmt1 = conn.prepareStatement("insert into board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) values(?, ?, 0, now(), ?, ?, ?, ?)");
 			PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from dual");
@@ -218,9 +218,9 @@ public class BoardDao {
 			// binding
 			// param 작성한 제목과 글
 			// update
-			pstmt.setLong(1, vo.getoNo());
-			pstmt.setLong(2, vo.getgNo());
-			pstmt.setLong(3, vo.getoNo());
+			// pstmt.setLong(1, vo.getoNo());
+			pstmt.setLong(1, vo.getgNo());
+			pstmt.setLong(2, vo.getoNo());
 			
 			// insert
 			pstmt1.setString(1, vo.getTitle());
@@ -242,7 +242,7 @@ public class BoardDao {
 
 		return result;
 	}
-
+	
 	// 조회수
 	public int updateHit(long no) {
 		int result = 0;
