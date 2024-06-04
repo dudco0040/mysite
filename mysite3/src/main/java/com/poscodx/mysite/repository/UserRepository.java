@@ -61,7 +61,7 @@ public class UserRepository {
 
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("elect no, name from user where email = ? and password = password(?)");
+			PreparedStatement pstmt = conn.prepareStatement("select no, name from user where email = ? and password = password(?)");
 			) {
 			
 			// binding
