@@ -8,6 +8,6 @@
 </head>
 <body>
 	<h1>500 Internal Server Error</h1>
-	<p>장애가 발생핬습니다.</p>
+	<p>장애가 발생했습니다.</p>
 </body>
 </html>
