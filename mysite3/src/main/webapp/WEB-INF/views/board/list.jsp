@@ -126,7 +126,7 @@
 				<c:if test="${not empty authUser}">
 					<div class="bottom">
 						<a
-							href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE"
+							href="${pageContext.request.contextPath}/board/write"
 							method="post" id="new-book">글쓰기</a>
 					</div>
 				</c:if>
