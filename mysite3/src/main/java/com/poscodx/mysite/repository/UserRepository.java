@@ -5,11 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.poscodx.mysite.exception.UserRepositoryException;
 import com.poscodx.mysite.vo.UserVo;
 
 @Repository
@@ -40,129 +40,25 @@ public class UserRepository {
 	
 	
 	public int insert(UserVo vo) {
-		int result = 0;
-
-		try (
-			Connection conn = getConnection();
-			PreparedStatement pstmt1 = conn.prepareStatement("insert into user values(null, ?, ?, password(?), ?, current_date())");
-			PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from dual");
-			) {
-			
-			// binding
-			pstmt1.setString(1, vo.getName());
-			pstmt1.setString(2, vo.getEmail());
-			pstmt1.setString(3, vo.getPassword());
-			pstmt1.setString(4, vo.getGender());
-			result = pstmt1.executeUpdate();
-
-			ResultSet rs = pstmt2.executeQuery();
-			vo.setNo(rs.next() ? rs.getLong(1) : null);
-			rs.close();
-		} catch (SQLException e) {
-			System.out.println("Error:" + e);
-		}
-
-		return result;		
+		return sqlSession.insert("user.insert", vo);
+		
 	}
 
 
 	public UserVo findByNoAndPassword(String email, String password) {
-		UserVo result = null;
-
-		try (
-			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("select no, name from user where email = ? and password = password(?)");
-			) {
-			
-			// binding
-			pstmt.setString(1, email);
-			pstmt.setString(2, password);
-			
-			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
-				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				
-				result = new UserVo();
-				result.setNo(no);
-				result.setName(name);
-				System.out.println("[Login info] no: " + no + "  name:" + name);
-				
-			}
-			rs.close();
-		} catch (SQLException e) {
-			throw new UserRepositoryException(e.toString());
-		}
-
-		return result;	
+		return sqlSession.selectOne(
+				"findByNoAndPassword"
+				, Map.of("email", email, "password", password));
 	}
 
-	public UserVo findByNo(Long userNo) {
-		UserVo result = null;
-
-		try (
-			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("select no, name, email, gender from user where no = ?");
-			) {
-			
-			// binding
-			pstmt.setLong(1, userNo);
-			
-			
-			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
-				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				String email = rs.getString(3);
-				String gender = rs.getString(4);
-				
-				System.out.println("(Dao) no: " + no + " name: " + name + " email: " + email + " gender:" + gender);
-				result = new UserVo();
-				result.setNo(no);
-				result.setName(name);
-				result.setEmail(email);
-				result.setGender(gender);
-				
-			}
-			rs.close();
-		} catch (SQLException e) {
-			System.out.println("Error:" + e);
-		}
-
-		return result;	
+	public UserVo findByNo(Long no) {
+		return sqlSession.selectOne("user.findByNo", no);
 	}
 
 
-	public int update(UserVo vo) {
-		int result = 0;
+	public int update(UserVo vo) {	
+		return sqlSession.selectOne("user.udate", vo);
 
-		try (
-			Connection conn = getConnection();
-			PreparedStatement pstmt1 = conn.prepareStatement("update user set name = ?, gender = ? where no = ?");
-			PreparedStatement pstmt2 = conn.prepareStatement("update user set name = ?, password = password(?) where no = ?");
-			) {
-			
-			// binding
-			if("".equals(vo.getPassword())) {
-				pstmt1.setString(1, vo.getName());
-				pstmt1.setString(2, vo.getGender());
-				pstmt1.setLong(3, vo.getNo());
-
-				result = pstmt1.executeUpdate();
-			} else {
-				pstmt2.setString(1, vo.getName());
-				pstmt2.setString(2, vo.getPassword());
-				pstmt2.setLong(3, vo.getNo());
-				
-				result = pstmt2.executeUpdate();
-	
-			}
-		}catch (SQLException e) {
-			System.out.println("Error:" + e);
-		}
-
-		return result;		
-	
 	}
 	
 
