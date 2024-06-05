@@ -49,12 +49,12 @@
 								<c:if test="${vo.depth != 0}">
 									<img src='${pageContext.request.contextPath}/assets/images/reply.png'>
 								</c:if>
-								<a href="${pageContext.request.contextPath}/board?a=view&no=${vo.no}" method="post">${vo.title }</a></td>
+								<a href="${pageContext.request.contextPath}/board/view/${vo.no}" method="post">${vo.title }</a></td>
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<c:if test="${not empty authUser and vo.userNo==authUser.no}">
-								<td><a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}" class="del">삭제</a></td>
+								<td><a href="${pageContext.request.contextPath}/board/delete/${vo.no}" class="del">삭제</a></td>
 							</c:if>
 						</tr>
 					</c:forEach>
@@ -65,7 +65,7 @@
 					<ul>
 						<!-- 이전 페이지 링크 -->
 						<c:if test="${currentPage > 1}">
-							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage - 1}">◀</a></li>
+							<li><a href="${pageContext.request.contextPath}/board/${currentPage - 1}">◀</a></li>
 						</c:if>
 						<!-- 페이지 번호 세팅 -->
 	       				<c:set var="startPage" value="${currentPage-2}" />
@@ -99,7 +99,7 @@
 								<c:otherwise>
 								
 									<c:if test="${i <= totalPages}">
-										<li><a href="${pageContext.request.contextPath}/board?page=${i}">${i}</a></li>
+										<li><a href="${pageContext.request.contextPath}/board/${i}">${i}</a></li>
 									</c:if>
 									<c:if test="${i > totalPages}">
 										<li class="disabled">${i}</li>
@@ -116,7 +116,7 @@
 						
 						<!-- 다음 페이지 링크 -->
 						<c:if test="${currentPage < totalPages}">
-							<li><a href="${pageContext.request.contextPath}/board?page=${currentPage + 1}">▶</a></li>
+							<li><a href="${pageContext.request.contextPath}/board/${currentPage + 1}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>
@@ -126,7 +126,7 @@
 				<c:if test="${not empty authUser}">
 					<div class="bottom">
 						<a
-							href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE"
+							href="${pageContext.request.contextPath}/board/write"
 							method="post" id="new-book">글쓰기</a>
 					</div>
 				</c:if>

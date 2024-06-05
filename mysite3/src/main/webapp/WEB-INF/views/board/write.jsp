@@ -14,7 +14,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board"> <!-- ?a=write -->
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/write"> <!-- ?a=write -->
 					<c:choose>
 						<c:when test="${isReply}">
 							<input type="hidden" name="a" value="reply">
@@ -44,7 +44,7 @@
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content"></textarea>
+								<textarea id="content" name="contents"></textarea>
 							</td>
 						</tr>
 					</table>

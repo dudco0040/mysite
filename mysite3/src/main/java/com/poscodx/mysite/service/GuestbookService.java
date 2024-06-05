@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.poscodx.mysite.repository.GuestBookRepository;
-import com.poscodx.mysite.vo.GuestBookVo;
+import com.poscodx.mysite.vo.GuestbookVo;
 
 @Service
 public class GuestbookService {
@@ -14,17 +14,17 @@ public class GuestbookService {
 	private GuestBookRepository guestbookRepository;
 	
 	// 리스트 보기 
-	public List<GuestBookVo> getContentsList(){
+	public List<GuestbookVo> getContentsList(){
 		return guestbookRepository.findAll();
 	}
 	
 	// 글 삭제 
-	public void daleteContents(GuestBookVo vo) {
+	public void daleteContents(GuestbookVo vo) {
 		guestbookRepository.delete(vo);
 	}
 	
 	// 글 작성
-	public void addContents(GuestBookVo vo) {
+	public void addContents(GuestbookVo vo) {
 		guestbookRepository.insert(vo);
 	}
 	

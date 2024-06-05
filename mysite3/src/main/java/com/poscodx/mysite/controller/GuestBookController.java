@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poscodx.mysite.service.GuestbookService;
-import com.poscodx.mysite.vo.GuestBookVo;
+import com.poscodx.mysite.vo.GuestbookVo;
 
 @Controller
 @RequestMapping("/guestbook")
@@ -22,14 +22,14 @@ public class GuestBookController {
 	// 리스트 보기
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	public String list(Model model) {
-		List<GuestBookVo> contents = guestbookService.getContentsList();
+		List<GuestbookVo> contents = guestbookService.getContentsList();
 		model.addAttribute("list", contents);
 		return "guestbook/list";
 	}
 	
 	// 글 작성
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public String add(GuestBookVo vo) {
+	public String add(GuestbookVo vo) {
 		guestbookService.addContents(vo);
 		
 		return "redirect:/guestbook/list";
@@ -48,7 +48,7 @@ public class GuestBookController {
 	@RequestMapping(value="/delete/{no}", method=RequestMethod.POST)
 	public String delete(@PathVariable("no") Long no, @RequestParam(value="password", required=true, defaultValue="") String password) {
 		System.out.println(no + "," + password);
-		GuestBookVo vo = new GuestBookVo();
+		GuestbookVo vo = new GuestbookVo();
 		vo.setNo(no);
 		vo.setPassword(password);
 		
