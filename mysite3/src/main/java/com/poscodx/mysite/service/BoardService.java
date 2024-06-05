@@ -1,6 +1,8 @@
 package com.poscodx.mysite.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,28 @@ public class BoardService {
 	@Autowired
 	private BoardRepository boardRepository;
 	
-	// 목록 (list)
-	public List<BoardVo> getList(int currentPage, int recordsPerPage) {
-		return boardRepository.getList(currentPage, recordsPerPage);
-	}
+	// 전체 글의 개수 계산 메서드 추가
+		public int countRecords() {
+			return boardRepository.countRecords();
+		}
 	
-	public int countRecords() {
-		return boardRepository.countRecords();
+	// 목록 (list)
+	public Map<String, Object> getList(int currentPage) {
+		List<BoardVo> list = null;
+		Map<String, Object> map = new HashMap<>();  // Map 초기화
+		
+		
+		int recordsPerPage = 8;  // 한 페이지당 보여줄 글의 개수
+		int totalRecords = countRecords();  // 전체 글의 개수 가져오기
+		int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+		list = boardRepository.getList(currentPage, recordsPerPage);
+		
+		map.put("list", list);
+		map.put("currentPage", currentPage);
+		map.put("recordsPerPage", recordsPerPage);
+		map.put("totalPages", totalPages);
+		
+		return map;  // sql 실행 후 결과 
 	}
 	
 	// 글 보기(view)
@@ -29,7 +46,7 @@ public class BoardService {
 
 	// 글 쓰기(write)
 	public void write(BoardVo vo) {
-		boardRepository.insert(vo);	
+		boardRepository.insert(vo);
 	}
 	
 	// 답글 쓰기(reply)

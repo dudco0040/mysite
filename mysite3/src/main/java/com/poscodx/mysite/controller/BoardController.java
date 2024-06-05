@@ -1,6 +1,6 @@
 package com.poscodx.mysite.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,7 @@ public class BoardController {
 	// 글 목록 보기(list)
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public String list(Model model, @RequestParam(value="page", required=true, defaultValue="") String page) {
+		
 		// 페이지(Pager)
 		int currentPage = 1;   // 현재 페이지
 		if (!page.isEmpty()) {
@@ -31,18 +32,17 @@ public class BoardController {
 		           currentPage = 1;
 		       }
 		   }
-	    int recordsPerPage = 8;  // 한 페이지당 보여줄 글의 개수
-	    int totalRecords = boardService.countRecords();   // 전체 글의 개수
-	    int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);  // 전체 페이지 개수
-	    
+		
 	    // 글 목록 보기
-		List<BoardVo> list = boardService.getList(currentPage, recordsPerPage);
-		//System.out.println(currentPage + "," + recordsPerPage);
+	    Map map = (Map) boardService.getList(currentPage);
 		
+        System.out.println("Map contents: " + map);
+        System.out.println("List contents: " + map.get("list"));
 		
-		model.addAttribute("list", list);
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("map", map);
+//		model.addAttribute("currentPage", currentPage);
+//		model.addAttribute("totalPages", totalPages);
+
 		
 		return "board/list";
 	}
@@ -74,8 +74,8 @@ public class BoardController {
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(@RequestParam(value="title", required=true, defaultValue="") String title, 
 						@RequestParam(value="contents", required=true, defaultValue="") String contents,
-						@PathVariable("isReply") boolean isReply,  // 이 부분 수정
-						@PathVariable(value = "no", required = false) Long no) {
+						@RequestParam(defaultValue = "false") boolean isReply,  // 이 부분 수정
+						@RequestParam(value = "no", required = false) Long no) {
 		
 		BoardVo vo = new BoardVo();
 		System.out.println(title + "," + contents + "," + isReply + "," + no);
@@ -89,7 +89,9 @@ public class BoardController {
 			boardService.reply(vo);
 		} else {
 			// 본문
+			System.out.println("본문~~");
 			boardService.write(vo);
+			
 		}
 		
 		return "redirect:/board/list";

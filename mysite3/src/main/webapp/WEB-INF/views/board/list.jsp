@@ -40,8 +40,8 @@
 					</tr>
 					<!-- forEach -->
 					<!-- 답글이면 들여쓰기 + 아이콘 넣기, 조건: 공백 * depth만큼 곱하기 -->
-					<c:set var="count" value="${fn:length(list) }" />
-					<c:forEach items="${list }" var="vo" varStatus="status">
+					<c:set var="count" value="${fn:length(map.list) }" />
+					<c:forEach items="${map.list }" var="vo" varStatus="status">
 						<c:set var="padding" value="${20 * vo.depth}" />
 						<tr>
 							<td>${vo.no }</td>
@@ -49,12 +49,12 @@
 								<c:if test="${vo.depth != 0}">
 									<img src='${pageContext.request.contextPath}/assets/images/reply.png'>
 								</c:if>
-								<a href="${pageContext.request.contextPath}/board/view/${vo.no}" method="post">${vo.title }</a></td>
+								<a href="${pageContext.request.contextPath}/board?a=view&no=${vo.no}" method="post">${vo.title }</a></td>
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<c:if test="${not empty authUser and vo.userNo==authUser.no}">
-								<td><a href="${pageContext.request.contextPath}/board/delete/${vo.no}" class="del">삭제</a></td>
+								<td><a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}" class="del">삭제</a></td>
 							</c:if>
 						</tr>
 					</c:forEach>
@@ -64,23 +64,23 @@
 				<div class="pager">
 					<ul>
 						<!-- 이전 페이지 링크 -->
-						<c:if test="${currentPage > 1}">
-							<li><a href="${pageContext.request.contextPath}/board/${currentPage - 1}">◀</a></li>
+						<c:if test="${map.currentPage > 1}">
+							<li><a href="${pageContext.request.contextPath}/board?page=${map.currentPage - 1}">◀</a></li>
 						</c:if>
 						<!-- 페이지 번호 세팅 -->
-	       				<c:set var="startPage" value="${currentPage-2}" />
-     					<c:set var="endPage" value="${currentPage+2}" />
+	       				<c:set var="startPage" value="${map.currentPage-2}" />
+     					<c:set var="endPage" value="${map.currentPage+2}" />
 							
-						<c:if test="${endPage > totalPages}">
-							<c:set var = "endPage" value="${totalPages}" />
+						<c:if test="${endPage > map.totalPages}">
+							<c:set var = "endPage" value="${map.totalPages}" />
 						</c:if>
 						
 						<c:if test="${startPage < 1}">
 							<c:set var="startPage" value="1" />
 							<c:set var="endPage" value="5" />
 						</c:if>
-						<c:if test="${endPage > totalPages}">
-							<c:set var="endPage" value="${totalPages}" />
+						<c:if test="${endPage > map.totalPages}">
+							<c:set var="endPage" value="${map.totalPages}" />
 							<c:if test="${endPage - 4 > 0}">
 								<c:set var="startPage" value="${endPage - 4}" />
 							</c:if>
@@ -93,15 +93,15 @@
 						<!-- 페이지 번호 링크 -->
 						<c:forEach var="i" begin="${startPage}" end="${endPage}">
 							<c:choose>
-								<c:when test="${i == currentPage}">
+								<c:when test="${i == map.currentPage}">
 									<li class="selected">${i}</li>
 								</c:when>
 								<c:otherwise>
 								
-									<c:if test="${i <= totalPages}">
-										<li><a href="${pageContext.request.contextPath}/board/${i}">${i}</a></li>
+									<c:if test="${i <= map.totalPages}">
+										<li><a href="${pageContext.request.contextPath}/board?page=${i}">${i}</a></li>
 									</c:if>
-									<c:if test="${i > totalPages}">
+									<c:if test="${i > map.totalPages}">
 										<li class="disabled">${i}</li>
 									</c:if>
 								</c:otherwise>
@@ -115,8 +115,8 @@
 						</c:forEach>
 						
 						<!-- 다음 페이지 링크 -->
-						<c:if test="${currentPage < totalPages}">
-							<li><a href="${pageContext.request.contextPath}/board/${currentPage + 1}">▶</a></li>
+						<c:if test="${map.currentPage < map.totalPages}">
+							<li><a href="${pageContext.request.contextPath}/board?page=${map.currentPage + 1}">▶</a></li>
 						</c:if>
 					</ul>
 				</div>
@@ -126,7 +126,7 @@
 				<c:if test="${not empty authUser}">
 					<div class="bottom">
 						<a
-							href="${pageContext.request.contextPath}/board/write"
+							href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE"
 							method="post" id="new-book">글쓰기</a>
 					</div>
 				</c:if>

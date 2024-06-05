@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<!-- 글 목록(list) -->
+	<select id="findAll" parameterType="map" resultType="boardvo">
+	<![CDATA[
+		select a.no, a.title, a.user_no, b.name as userName, a.hit, date_format(a.reg_date, '%Y/%m/%d %h:%i:%s') as regDate, a.g_no as gNo, a.o_no as oNo, a.depth as depth
+	    from board a, user b
+	    where a.user_no = b.no
+	    order by a.g_no desc, o_no asc
+	    limit #{offset}, #{limit}
+	]]>
+	</select>
+	
+	<select id="view" parameterType="long" resultType="boardvo">
+	<![CDATA[
+		select title, contents, g_no, o_no, depth, user_no 
+		from board 
+		where no = #{no}
+	]]>
+	</select>
+	
+	<insert id="write" parameterType="boardvo">
+	<![CDATA[
+		INSERT INTO board (title, contents, hit, reg_date, g_no, o_no, depth, user_no) 
+		SELECT #{title}, #{contents}, 0, NOW(), IFNULL(MAX(g_no), 0) + 1, 1, 0, #{userNo} 
+		FROM board
+	]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			<![CDATA[
+				select last_insert_id() from dual
+			]]>
+		</selectKey>
+	</insert>
+	
+	
+</mapper>
+
