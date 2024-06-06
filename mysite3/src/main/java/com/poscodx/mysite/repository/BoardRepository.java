@@ -40,39 +40,8 @@ public class BoardRepository {
 
 	// 글 쓰기
 	public int insert(BoardVo vo) {
+		System.out.println(vo);
 		return sqlSession.insert("board.write", vo);
-
-//		try (
-//			Connection conn = getConnection();
-//			PreparedStatement pstmt1 = conn.prepareStatement("INSERT INTO board (title, contents, hit, reg_date, g_no, o_no, depth, user_no) "
-//					+ "SELECT ?, ?, 0, NOW(), IFNULL(MAX(g_no), 0) + 1, 1, 0, ? FROM board");
-//					//("insert into board values(null, ?, ?, 0, now(), ?, 1, 0, ?)");  // null, ?, ?, 0, now(), max(g_no)+1, 1, 0, ?)
-//			
-//				
-//				
-//			PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from dual");
-//			) {
-//
-//			System.out.println("[Dao vo] " + vo.getTitle() + vo.getContents() + vo.getgNo() + vo.getUserNo());
-//			// binding
-//			// param 작성한 제목과 글
-//			pstmt1.setString(1, vo.getTitle());
-//			pstmt1.setString(2, vo.getContents());
-////			pstmt1.setLong(3, vo.getgNo());  // vo.getgNo()
-//			pstmt1.setLong(3, vo.getUserNo());
-//
-//
-//			//result = pstmt1.executeUpdate();
-//			pstmt1.executeUpdate();
-//			
-//			ResultSet rs = pstmt2.executeQuery();
-//			vo.setNo(rs.next() ? rs.getLong(1) : null);
-//			rs.close();
-//		} catch (SQLException e) {
-//			System.out.println("Error:" + e);
-//		}
-//
-//		//return result;
 	}
 
 

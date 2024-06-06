@@ -2,6 +2,8 @@ package com.poscodx.mysite.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poscodx.mysite.service.BoardService;
 import com.poscodx.mysite.vo.BoardVo;
+import com.poscodx.mysite.vo.UserVo;
 
 @Controller
 @RequestMapping("/board")
@@ -34,14 +37,12 @@ public class BoardController {
 		   }
 		
 	    // 글 목록 보기
-	    Map map = (Map) boardService.getList(currentPage);
+		Map<String, Object> map = boardService.getList(currentPage);
 		
-        System.out.println("Map contents: " + map);
-        System.out.println("List contents: " + map.get("list"));
+//        System.out.println("Map contents: " + map);
+//        System.out.println("List contents: " + map.get("list"));
 		
 		model.addAttribute("map", map);
-//		model.addAttribute("currentPage", currentPage);
-//		model.addAttribute("totalPages", totalPages);
 
 		
 		return "board/list";
@@ -67,21 +68,32 @@ public class BoardController {
 		
 		model.addAttribute("no", no);
 		model.addAttribute("isReply", isReply);
-		return "board/write";
+		return "board/write";		// writeform으로 이동 
 	}
 	
 	//write
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(@RequestParam(value="title", required=true, defaultValue="") String title, 
 						@RequestParam(value="contents", required=true, defaultValue="") String contents,
-						@RequestParam(defaultValue = "false") boolean isReply,  // 이 부분 수정
-						@RequestParam(value = "no", required = false) Long no) {
+						@RequestParam(required = false, defaultValue = "false") boolean isReply,  // 이 부분 수정
+						@RequestParam(value = "no", required = false) Long no,
+						HttpSession session) {
 		
+		
+		// Access Control
+        UserVo authUser = (UserVo) session.getAttribute("authUser");
+        System.out.println(authUser.getNo());
+        if (authUser.getNo() == null) {
+            return "redirect:/board";
+        }
+        
+        
 		BoardVo vo = new BoardVo();
 		System.out.println(title + "," + contents + "," + isReply + "," + no);
 		
 		vo.setTitle(title);
 		vo.setContents(contents);
+		vo.setUserNo(authUser.getNo());   // 비회원일 경우, 달 수 없음 - 글쓰기 폼에 아예 들어갈수 없어야함 
 		
 		if(isReply && no != null) {
 			// 답글
@@ -94,7 +106,7 @@ public class BoardController {
 			
 		}
 		
-		return "redirect:/board/list";
+		return "redirect:/board";
 	}
 	
 	// 글 삭제
