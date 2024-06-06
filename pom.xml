@@ -9,6 +9,7 @@
 	<modules>
 		<module>mysite2</module>
 		<module>mysite3</module>
+		<module>mysite3_class</module>
 	</modules>
 	<build>
 		<plugins>
