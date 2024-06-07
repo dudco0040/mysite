@@ -13,14 +13,16 @@
 	]]>
 	</select>
 	
+	<!-- 글 보기(view) -->
 	<select id="view" parameterType="long" resultType="boardvo">
 	<![CDATA[
-		select title, contents, g_no, o_no, depth, user_no 
+		select no, title, contents, g_no as gNo, o_no as oNo, depth, user_no as userNo
 		from board 
 		where no = #{no}
 	]]>
 	</select>
 	
+	<!-- 글쓰기(write) -->
 	<insert id="write" parameterType="boardvo">
 	<![CDATA[
 		INSERT INTO board (title, contents, hit, reg_date, g_no, o_no, depth, user_no) 
@@ -33,6 +35,16 @@
 			]]>
 		</selectKey>
 	</insert>
+	
+	<!-- 글 수정(update) -->
+	<update id="update" parameterType="boardvo">
+		<![CDATA[
+			update board 
+			set title = #{title}, contents = #{contents}, reg_date=now() 
+			where no = #{no}
+		]]>
+	</update>
+	
 	
 	
 </mapper>

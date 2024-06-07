@@ -39,8 +39,8 @@ public class BoardController {
 	    // 글 목록 보기
 		Map<String, Object> map = boardService.getList(currentPage);
 		
-//        System.out.println("Map contents: " + map);
-//        System.out.println("List contents: " + map.get("list"));
+        // System.out.println("Map contents: " + map);
+        // System.out.println("List contents: " + map.get("list"));
 		
 		model.addAttribute("map", map);
 
@@ -51,10 +51,27 @@ public class BoardController {
 	
 	// 글 보기(view)
 	@RequestMapping(value="/view/{no}", method=RequestMethod.GET)
-	public String view(@PathVariable("no") Long no, Model model) {
+	public String view(@PathVariable("no") Long no, Model model,
+						HttpSession session) {
+		
+		// Access Control
+        UserVo authUser = (UserVo) session.getAttribute("authUser");
+
+        // 글보기는 모두가 가능해야함 -> authUser값은 jsp 파일에서 판단 하니까 여기서는 전달만.. 회원 정보만 전달 
+        // auth 는 어떻게 보내?  로그인을 안하면 null, 하면 넘겨
+        
+        
 		BoardVo vo = boardService.view(no);
 		
+		// jsp 파일로 전달 
 		model.addAttribute("vo", vo);
+		System.out.println(vo);		// vo에 값이 다 안들어감 user_no = null -> 수정이 되지 않음 
+		if(authUser != null) {
+    		model.addAttribute("authUser", authUser);
+    		System.out.println(authUser);
+        }
+		
+		// auth 이 부분을 찾아보자.. 그리고 userNo가 어디서 나오는지...
 		
 		return "board/view"; 
 	}
@@ -71,14 +88,13 @@ public class BoardController {
 		return "board/write";		// writeform으로 이동 
 	}
 	
-	//write
+	// write
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(@RequestParam(value="title", required=true, defaultValue="") String title, 
 						@RequestParam(value="contents", required=true, defaultValue="") String contents,
 						@RequestParam(required = false, defaultValue = "false") boolean isReply,  // 이 부분 수정
 						@RequestParam(value = "no", required = false) Long no,
 						HttpSession session) {
-		
 		
 		// Access Control
         UserVo authUser = (UserVo) session.getAttribute("authUser");
@@ -107,6 +123,43 @@ public class BoardController {
 		}
 		
 		return "redirect:/board";
+	}
+	
+	// 글 수정(update)
+	@RequestMapping(value="modify/{no}", method=RequestMethod.GET)
+	public String update(@PathVariable("title") String title, 
+						@PathVariable("contents") String contents,
+						@PathVariable("no") Long no,
+						Model model) {
+		
+		// jsp 파일에 전달 
+		model.addAttribute("no");
+		model.addAttribute("title");
+		model.addAttribute("contents");
+		
+		return "board/modify";
+	}
+	
+	
+	@RequestMapping(value="modify/{no}", method=RequestMethod.POST)
+	public String update(@RequestParam(value="title", required=true, defaultValue="") String title, 
+						@RequestParam(value="contents", required=true, defaultValue="") String contents,
+						@PathVariable("no") Long no,
+						Model model,
+						HttpSession session) {
+		
+		
+		
+		// 한꺼번에 넘기기
+		BoardVo vo = new BoardVo();
+		//vo.setUserNo(authUser.getNo());
+		vo.setTitle(title);
+		vo.setContents(contents);
+		
+		boardService.update(vo);
+		
+		return "redirect:/board/list";
+		
 	}
 	
 	// 글 삭제
