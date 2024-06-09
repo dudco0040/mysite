@@ -32,7 +32,7 @@
 		]]>
 	</select>
 	
-	<update id="upddte" parameterType="uservo">
+	<update id="update" parameterType="uservo">
 	
 	
 		<choose>
