@@ -24,7 +24,8 @@ public class BoardController {
 	
 	// 글 목록 보기(list)
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String list(Model model, @RequestParam(value="page", required=true, defaultValue="") String page) {
+	public String list(@RequestParam(value="page", required=true, defaultValue="") String page,
+						Model model) {
 		
 		// 페이지(Pager)
 		int currentPage = 1;   // 현재 페이지
@@ -39,11 +40,16 @@ public class BoardController {
 	    // 글 목록 보기
 		Map<String, Object> map = boardService.getList(currentPage);
 		
-        // System.out.println("Map contents: " + map);
-        // System.out.println("List contents: " + map.get("list"));
+		System.out.println("======================");
+        System.out.println("Map contents: " + map);
+        System.out.println("List contents: " + map.get("list"));
+		
+		// Access Control
+        //UserVo authUser = (UserVo) session.getAttribute("authUser");
+        //System.out.println("authUser: " + authUser);
 		
 		model.addAttribute("map", map);
-
+		//model.addAttribute("authUser", authUser);
 		
 		return "board/list";
 	}
@@ -51,41 +57,35 @@ public class BoardController {
 	
 	// 글 보기(view)
 	@RequestMapping(value="/view/{no}", method=RequestMethod.GET)
-	public String view(@PathVariable("no") Long no, Model model,
+	public String view(@PathVariable("no") Long no, 
+						Model model,
 						HttpSession session) {
 		
 		// Access Control
         UserVo authUser = (UserVo) session.getAttribute("authUser");
-
-        // 글보기는 모두가 가능해야함 -> authUser값은 jsp 파일에서 판단 하니까 여기서는 전달만.. 회원 정보만 전달 
-        // auth 는 어떻게 보내?  로그인을 안하면 null, 하면 넘겨
-        
         
 		BoardVo vo = boardService.view(no);
 		
 		// jsp 파일로 전달 
 		model.addAttribute("vo", vo);
-		System.out.println(vo);		// vo에 값이 다 안들어감 user_no = null -> 수정이 되지 않음 
 		if(authUser != null) {
     		model.addAttribute("authUser", authUser);
-    		System.out.println(authUser);
         }
-		
-		// auth 이 부분을 찾아보자.. 그리고 userNo가 어디서 나오는지...
 		
 		return "board/view"; 
 	}
 	
 	
 	// 글쓰기(insert)
+	// writeform으로 이동 
 	@RequestMapping(value="/write", method=RequestMethod.GET)
 	public String write(@RequestParam(required = false) Long no, 
-            				@RequestParam(required = false, defaultValue = "false") boolean isReply, 
-            				Model model) {
+        				@RequestParam(required = false, defaultValue = "false") boolean isReply, 
+        				Model model) {
 		
 		model.addAttribute("no", no);
-		model.addAttribute("isReply", isReply);
-		return "board/write";		// writeform으로 이동 
+		model.addAttribute("isReply", isReply);  // false
+		return "board/write";		
 	}
 	
 	// write
@@ -96,6 +96,7 @@ public class BoardController {
 						@RequestParam(value = "no", required = false) Long no,
 						HttpSession session) {
 		
+		//System.out.println("+++" + title + contents + isReply + no);
 		// Access Control
         UserVo authUser = (UserVo) session.getAttribute("authUser");
         System.out.println(authUser.getNo());
@@ -110,6 +111,7 @@ public class BoardController {
 		vo.setTitle(title);
 		vo.setContents(contents);
 		vo.setUserNo(authUser.getNo());   // 비회원일 경우, 달 수 없음 - 글쓰기 폼에 아예 들어갈수 없어야함 
+		// 이 부분에 authuser를 넣지 않고 user를 넣도록 변경 ??
 		
 		if(isReply && no != null) {
 			// 답글
@@ -117,25 +119,21 @@ public class BoardController {
 			boardService.reply(vo);
 		} else {
 			// 본문
-			System.out.println("본문~~");
 			boardService.write(vo);
-			
 		}
-		
 		return "redirect:/board";
 	}
 	
 	// 글 수정(update)
 	@RequestMapping(value="modify/{no}", method=RequestMethod.GET)
-	public String update(@PathVariable("title") String title, 
-						@PathVariable("contents") String contents,
-						@PathVariable("no") Long no,
-						Model model) {
+	public String update( @PathVariable("no") Long no,
+					 	 Model model) {
+	
+		BoardVo vo = boardService.view(no);
+		System.out.println(vo);
 		
 		// jsp 파일에 전달 
-		model.addAttribute("no");
-		model.addAttribute("title");
-		model.addAttribute("contents");
+		model.addAttribute("vo", vo);
 		
 		return "board/modify";
 	}
@@ -143,30 +141,31 @@ public class BoardController {
 	
 	@RequestMapping(value="modify/{no}", method=RequestMethod.POST)
 	public String update(@RequestParam(value="title", required=true, defaultValue="") String title, 
-						@RequestParam(value="contents", required=true, defaultValue="") String contents,
-						@PathVariable("no") Long no,
-						Model model,
-						HttpSession session) {
-		
-		
+						 @RequestParam(value="content", required=true, defaultValue="") String contents,
+						 @PathVariable("no") Long no,
+						 Model model) {
 		
 		// 한꺼번에 넘기기
 		BoardVo vo = new BoardVo();
-		//vo.setUserNo(authUser.getNo());
+		vo.setNo(no);
+		// 수정(입력값)
 		vo.setTitle(title);
 		vo.setContents(contents);
 		
 		boardService.update(vo);
 		
-		return "redirect:/board/list";
+		return "redirect:/board";
 		
 	}
 	
 	// 글 삭제
-//	@RequestMapping(value="delete", method=RequestMethod.POST)
-//	public String delete() {
-//		boardService.delete();   // no, userNo
-//		return "redirect:/board/list";
-//	}
+	@RequestMapping(value="delete/{no}", method=RequestMethod.GET)
+	public String delete(@PathVariable("no") Long no,
+						 HttpSession session) {
+		UserVo authUser = (UserVo) session.getAttribute("authUser");
+		boardService.delete(no, authUser.getNo());
+		
+		return "redirect:/board";
+	}
 		
 }

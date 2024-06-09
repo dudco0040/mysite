@@ -53,10 +53,15 @@ public class BoardService {
 	public void reply(BoardVo vo) {
 		boardRepository.reply(vo);
 	}
+	
+	// 글 수정(update)
+	public void update(BoardVo vo) {
+		boardRepository.update(vo);
+	}
 
 	// 글 삭제(delete)
-//	public void delete() {
-//		boardRepository.delete(no, userNo);
-//	}
+	public void delete(Long no, Long userNo) {
+		boardRepository.delete(no, userNo);
+	}
 	
 }

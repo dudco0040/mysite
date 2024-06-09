@@ -54,7 +54,11 @@
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<c:if test="${not empty authUser and vo.userNo==authUser.no}">
-								<td><a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}" class="del">삭제</a></td>
+								<td>
+									<a href="${pageContext.request.contextPath}/board/delete/${vo.no}" class="del">
+									<img src="${pageContext.request.contextPath}/assets/images/recycle.png" alt="삭제">
+									</a>
+								</td>
 							</c:if>
 						</tr>
 					</c:forEach>

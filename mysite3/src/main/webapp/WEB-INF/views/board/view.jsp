@@ -38,9 +38,11 @@
 					<!-- 비회원 기능 제한 -->			
 					<c:if test="${not empty authUser}">
 						<c:if test="${vo.userNo==authUser.no}">					
-							<a href="${pageContext.request.contextPath}/board?a=modifyform&no=${vo.no}&title=${vo.title}&contents=${fn:escapeXml(vo.contents)}">글수정</a>
+							<a href="${pageContext.request.contextPath}/board/modify/${vo.no}" >글수정</a>
+							    <input type="hidden" name="title" value="${vo.title}" />
+							    <input type="hidden" name="contents" value="${vo.contents}" />
 						</c:if>
-						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=TRUE&no=${vo.no}" method="post" id="new-book">답글달기</a>	<!-- &reply=TRUE -->
+						<a href="${pageContext.request.contextPath}/board/write/reply=TRUE/${vo.no}" method="post" id="new-book">답글달기</a>	<!-- &reply=TRUE -->
 					</c:if>
 				</div>
 			</div>

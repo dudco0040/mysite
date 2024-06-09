@@ -5,7 +5,7 @@
 	<!-- 글 목록(list) -->
 	<select id="findAll" parameterType="map" resultType="boardvo">
 	<![CDATA[
-		select a.no, a.title, a.user_no, b.name as userName, a.hit, date_format(a.reg_date, '%Y/%m/%d %h:%i:%s') as regDate, a.g_no as gNo, a.o_no as oNo, a.depth as depth
+		select a.no, a.title, a.user_no as userNo, b.name as userName, a.hit, date_format(a.reg_date, '%Y/%m/%d %h:%i:%s') as regDate, a.g_no as gNo, a.o_no as oNo, a.depth as depth
 	    from board a, user b
 	    where a.user_no = b.no
 	    order by a.g_no desc, o_no asc
@@ -40,12 +40,18 @@
 	<update id="update" parameterType="boardvo">
 		<![CDATA[
 			update board 
-			set title = #{title}, contents = #{contents}, reg_date=now() 
+			set title = #{title}, contents = #{contents}, reg_date=now()
 			where no = #{no}
 		]]>
 	</update>
 	
-	
+	<!-- 글 삭제(delete) -->
+	<delete id="delete" parameterType="long">
+		<![CDATA[
+			delete from board 
+			where no = #{no} and user_no = #{userNo}
+		]]>
+	</delete>
 	
 </mapper>
 

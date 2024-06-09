@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +46,19 @@ public class BoardRepository {
 
 	// 글 보기(view)
 	public BoardVo findByTitleAndUsernoView(Long no) {
-		return sqlSession.selectOne("board.view", Map.of("no", no));
+		return sqlSession.selectOne("board.view", Map.of("no", no));   // db 에서 select 해오는데, 있는 값을 가져오지 못함 
+	}
+	
+
+	// 글 수정
+	public int update(BoardVo vo) {
+		return sqlSession.update("board.update", Map.of("no", vo.getNo() , "title", vo.getTitle(), "contents", vo.getContents()));
+	}
+	
+
+	// 글 삭제
+	public int delete(Long no, Long userNo) {
+		return sqlSession.delete("board.delete", Map.of("no", no, "userNo", userNo));
 	}
 	
 	
@@ -94,53 +105,6 @@ public class BoardRepository {
 	}
 
 
-	// 글 수정
-	public int update(BoardVo vo) {
-		int result = 0;
-		System.out.println("no: " + vo.getgNo() + " Title: " + vo.getTitle());
-
-		try (
-			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("update board set title = ?, contents = ?, reg_date=now() where no = ?");
-			) {
-
-			// binding
-			pstmt.setString(1, vo.getTitle());
-			pstmt.setString(2, vo.getContents());
-			pstmt.setLong(3, vo.getNo());  //글 번호
-
-			result = pstmt.executeUpdate();
-
-		}catch (SQLException e) {
-			System.out.println("Error:" + e);
-		}
-
-		return result;
-	}
-
-	// 글 삭제
-	public int delete(Long no, Long userNo) {
-		int result = 0;
-
-		try (
-				Connection conn = getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("delete from board where no = ? and user_no = ?");
-			) {
-
-			//4. binding
-			pstmt.setLong(1, no);
-			pstmt.setLong(2, userNo);
-
-			//5. SQL 실행
-			result = pstmt.executeUpdate();
-
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
 	
 	
 	// 답글 달기 
