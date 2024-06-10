@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.poscodx.mysite.security.Auth;
 import com.poscodx.mysite.service.BoardService;
 import com.poscodx.mysite.vo.BoardVo;
 import com.poscodx.mysite.vo.UserVo;
@@ -40,9 +41,8 @@ public class BoardController {
 	    // 글 목록 보기
 		Map<String, Object> map = boardService.getList(currentPage);
 		
-		System.out.println("======================");
-        System.out.println("Map contents: " + map);
-        System.out.println("List contents: " + map.get("list"));
+        //System.out.println("Map contents: " + map);
+        //System.out.println("List contents: " + map.get("list"));
 		
 		// Access Control
         //UserVo authUser = (UserVo) session.getAttribute("authUser");
@@ -78,17 +78,25 @@ public class BoardController {
 	
 	// 글쓰기(insert)
 	// writeform으로 이동 
-	@RequestMapping(value="/write", method=RequestMethod.GET)
-	public String write(@RequestParam(required = false) Long no, 
+	@Auth
+	@RequestMapping(value={"/write", "/write/{no}"}, method=RequestMethod.GET)
+	public String write(@PathVariable(value = "no", required = false) Long no, 
         				@RequestParam(required = false, defaultValue = "false") boolean isReply, 
         				Model model) {
 		
+		if(no != null) {
+			isReply = true;
+		}
+		
+		//System.out.println("===="+no+isReply);
 		model.addAttribute("no", no);
 		model.addAttribute("isReply", isReply);  // false
+		
 		return "board/write";		
 	}
 	
 	// write
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(@RequestParam(value="title", required=true, defaultValue="") String title, 
 						@RequestParam(value="contents", required=true, defaultValue="") String contents,
@@ -96,10 +104,15 @@ public class BoardController {
 						@RequestParam(value = "no", required = false) Long no,
 						HttpSession session) {
 		
-		//System.out.println("+++" + title + contents + isReply + no);
+		if(no != null) {
+			isReply = true;
+		}
+		
+		System.out.println("+++" + title + contents + isReply + no);
+		
 		// Access Control
         UserVo authUser = (UserVo) session.getAttribute("authUser");
-        System.out.println(authUser.getNo());
+        System.out.println("authUser" + authUser.getNo());
         if (authUser.getNo() == null) {
             return "redirect:/board";
         }
@@ -107,7 +120,8 @@ public class BoardController {
         
 		BoardVo vo = new BoardVo();
 		System.out.println(title + "," + contents + "," + isReply + "," + no);
-		
+
+		vo.setgNo(no);
 		vo.setTitle(title);
 		vo.setContents(contents);
 		vo.setUserNo(authUser.getNo());   // 비회원일 경우, 달 수 없음 - 글쓰기 폼에 아예 들어갈수 없어야함 
@@ -115,16 +129,19 @@ public class BoardController {
 		
 		if(isReply && no != null) {
 			// 답글
-			vo.setgNo(no);
-			boardService.reply(vo);
+			System.out.println("답글!!!");
+			boardService.replyUpdate(vo.getgNo(), vo.getoNo());  // update 
+			boardService.reply(vo);  // insert
 		} else {
 			// 본문
+			System.out.println("본문!!!");
 			boardService.write(vo);
 		}
 		return "redirect:/board";
 	}
 	
 	// 글 수정(update)
+	@Auth
 	@RequestMapping(value="modify/{no}", method=RequestMethod.GET)
 	public String update( @PathVariable("no") Long no,
 					 	 Model model) {
@@ -167,5 +184,17 @@ public class BoardController {
 		
 		return "redirect:/board";
 	}
+	
+	// 답글달기(reply)
+	// writeform으로 이동 
+//	@RequestMapping(value="/write/{no}", method=RequestMethod.GET)
+//	public String reply(@PathVariable("no") Long no,
+//						@RequestParam(required = false, defaultValue = "true") boolean isReply, 
+//        				Model model) {
+//		
+//		model.addAttribute("no", no);
+//		model.addAttribute("isReply", isReply);  // true
+//		return "board/write";
+//	}
 		
 }
