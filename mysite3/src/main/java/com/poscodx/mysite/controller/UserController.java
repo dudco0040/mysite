@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.poscodx.mysite.security.Auth;
+import com.poscodx.mysite.security.AuthUser;
 import com.poscodx.mysite.service.UserService;
 import com.poscodx.mysite.vo.UserVo;
 
@@ -40,25 +42,6 @@ public class UserController {
 		return "user/login";
 	}
 	
-	
-	@RequestMapping(value = "/login", method=RequestMethod.POST)
-	public String login(HttpSession session, UserVo vo, Model model) {
-		// login 처리- Atheutication
-		UserVo authUser = userService.getUser(vo.getEmail(), vo.getPassword());
-		
-		if(authUser == null) {
-			model.addAttribute("email", vo.getEmail());
-			model.addAttribute("reusult", "fail");
-			
-			return "user/login";
-		}
-		
-		// login 처리
-		session.setAttribute("authUser", authUser);
-		
-		return "redirect:/";
-	}
-	
 	// 로그아웃
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
@@ -70,14 +53,15 @@ public class UserController {
 	
 	
 	// 정보 수정
+	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.GET)
-	public String update(HttpSession session, Model model) {
+	public String update(@AuthUser UserVo authUser, Model model) {
 		// access control
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		////////////////////////
+//		UserVo authUser = (UserVo)session.getAttribute("authUser");
+//		if(authUser == null) {
+//			return "redirect:/";
+//		}
+		////////////////////////  접근 제어는 가능하나 authUser의 값이 필요 - 코드에서 없앨 수 없음 
 
 		UserVo vo = userService.getUser(authUser.getNo());
 		model.addAttribute("userVo", vo);
