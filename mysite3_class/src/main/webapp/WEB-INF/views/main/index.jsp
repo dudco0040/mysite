@@ -15,7 +15,7 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" src="${pageContext.request.contextPath}/assets/images/poo.jpeg" style='width: 250px'>
+					<img id="profile" src="${pageContext.request.contextPath}/assets/images/profile.jpeg" style='width: 250px'>
 					<h2>Hello! Welcome to MySite! :) </h2>
 					<p>
 						이 사이트는  웹 프로그램밍 실습과제 예제 사이트입니다.<br>

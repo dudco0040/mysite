@@ -52,10 +52,10 @@ public class BoardService {
 	public Map<String, Object> getContentsList(int currentPage, String keyword) {
 		
 		//1. 페이징을 위한 기본 데이터 계산
-		int totalCount = boardRepository.getTotalCount(keyword); 
-		int pageCount = (int)Math.ceil((double)totalCount / LIST_SIZE);
-		int blockCount = (int)Math.ceil((double)pageCount / PAGE_SIZE);
-		int currentBlock = (int)Math.ceil((double)currentPage / PAGE_SIZE);
+		int totalCount = boardRepository.getTotalCount(keyword); 	// 전체 글 개수 
+		int pageCount = (int)Math.ceil((double)totalCount / LIST_SIZE);		// 페이지 개수
+		int blockCount = (int)Math.ceil((double)pageCount / PAGE_SIZE);		// 블록 개수
+		int currentBlock = (int)Math.ceil((double)currentPage / PAGE_SIZE);		// 현재 블록
 		
 		//2. 파라미터 page 값  검증
 		if(currentPage > pageCount) {
