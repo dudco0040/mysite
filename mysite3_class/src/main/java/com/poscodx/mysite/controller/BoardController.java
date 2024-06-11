@@ -2,8 +2,6 @@ package com.poscodx.mysite.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poscodx.mysite.security.Auth;
+import com.poscodx.mysite.security.AuthUser;
 import com.poscodx.mysite.service.BoardService;
 import com.poscodx.mysite.vo.BoardVo;
 import com.poscodx.mysite.vo.UserVo;
@@ -50,12 +49,12 @@ public class BoardController {
 	@Auth
 	@RequestMapping("/delete/{no}")
 	public String delete(
-		HttpSession session,
+		@AuthUser UserVo authUser,
 		@PathVariable("no") Long boardNo,
 		@RequestParam(value="p", required=true, defaultValue="1") Integer page,
 		@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {
 		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		//UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
@@ -66,9 +65,9 @@ public class BoardController {
 	
 	@Auth
 	@RequestMapping("/modify/{no}")	
-	public String modify(HttpSession session, @PathVariable("no") Long no, Model model) {
+	public String modify(@AuthUser UserVo authUser, @PathVariable("no") Long no, Model model) {
 
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		//UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
@@ -81,12 +80,12 @@ public class BoardController {
 	@Auth
 	@RequestMapping(value="/modify", method=RequestMethod.POST)	
 	public String modify(
-		HttpSession session, 
+		@AuthUser UserVo authUser, 
 		BoardVo boardVo,
 		@RequestParam(value="p", required=true, defaultValue="1") Integer page,
 		@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {		
 		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		//UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
@@ -108,12 +107,12 @@ public class BoardController {
 	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)	
 	public String write(
-		HttpSession session,
+		@AuthUser UserVo authUser,
 		@ModelAttribute BoardVo boardVo,
 		@RequestParam(value="p", required=true, defaultValue="1") Integer page,
 		@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {
 
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		//UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
