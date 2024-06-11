@@ -4,11 +4,11 @@ public class SiteVo {
 	private Long no;
 	private String title;
 	private String welcome;
-	private String proile;
+	private String profile;
 	private String description;
 	@Override
 	public String toString() {
-		return "SiteVo [no=" + no + ", title=" + title + ", welcome=" + welcome + ", proile=" + proile
+		return "SiteVo [no=" + no + ", title=" + title + ", welcome=" + welcome + ", profile=" + profile
 				+ ", description=" + description + "]";
 	}
 	public Long getNo() {
@@ -29,11 +29,11 @@ public class SiteVo {
 	public void setWelcome(String welcome) {
 		this.welcome = welcome;
 	}
-	public String getProile() {
-		return proile;
+	public String getProfile() {
+		return profile;
 	}
-	public void setProile(String proile) {
-		this.proile = proile;
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 	public String getDescription() {
 		return description;
