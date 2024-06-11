@@ -41,35 +41,7 @@ public class UserController {
 	public String login() {
 		return "user/login";
 	}
-	
-	
-//	@RequestMapping(value = "/login", method=RequestMethod.POST)
-//	public String login(HttpSession session, UserVo vo, Model model) {
-//		// login 처리- Atheutication
-//		UserVo authUser = userService.getUser(vo.getEmail(), vo.getPassword());
-//		
-//		if(authUser == null) {
-//			model.addAttribute("email", vo.getEmail());
-//			model.addAttribute("reusult", "fail");
-//			
-//			return "user/login";
-//		}
-//		
-//		// login 처리
-//		session.setAttribute("authUser", authUser);
-//		
-//		return "redirect:/";
-//	}
-	
-//	// 로그아웃
-//	@RequestMapping("/logout")
-//	public String logout(HttpSession session) {
-//		session.removeAttribute("authUser");
-//		session.invalidate();
-//		
-//		return "redirect:/";
-//	}
-//	
+
 	
 	// 정보 수정
 	@Auth
