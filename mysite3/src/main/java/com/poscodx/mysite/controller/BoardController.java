@@ -130,8 +130,22 @@ public class BoardController {
 		if(isReply && no != null) {
 			// 답글
 			System.out.println("답글!!!");
-			boardService.replyUpdate(vo.getgNo(), vo.getoNo());  // update 
+			
+			
+			// 본문
+			BoardVo content = boardService.view(no);
+			System.out.println("본문:  " + content);
+			boardService.replyUpdate(content.getgNo(), content.getoNo()+1);  // update 
+			
+			// param으로 받은 값(title, contents)
+			vo.setgNo(content.getgNo());
+			vo.setoNo(content.getoNo()+1);
+			vo.setDepth(content.getDepth()+1);
+			System.out.println("새로 작성한 답글:  " + vo);
 			boardService.reply(vo);  // insert
+
+			System.out.println("============================");
+			
 		} else {
 			// 본문
 			System.out.println("본문!!!");
