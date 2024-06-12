@@ -17,6 +17,7 @@
 				<div id="site-form">
 					<form method="post" action="${pageContext.request.contextPath }/admin/main/update" enctype="multipart/form-data">
 						<label class="block-label" for="title">사이트 타이틀</label>
+						<input type='hidden' name='profile' value='${siteVo.profile }' >
 						<input id="title" name="title" type="text" value="${siteVo.title }">
 						
 						<label class="block-label" for="welcome">환영 메세지</label>
