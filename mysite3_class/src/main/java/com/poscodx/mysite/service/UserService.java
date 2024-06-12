@@ -22,7 +22,11 @@ public class UserService {
 	public UserVo getUser(Long no) {
 		return userRepository.findByNo(no);
 	}
-
+	
+	public UserVo getUser(String eamil) {
+		return userRepository.findByEmail(eamil);
+	}
+	
 	public void update(UserVo vo) {
 		userRepository.update(vo);
 	}
