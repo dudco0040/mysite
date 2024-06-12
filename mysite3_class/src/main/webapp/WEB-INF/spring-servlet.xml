@@ -60,7 +60,11 @@
 			<mvc:exclude-mapping path="/assets/**" />
 			<bean class="com.poscodx.mysite.security.AuthInterceptor" />
 		</mvc:interceptor>
-
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.poscodx.mysite.interceptor.SiteInterceptor">
+			</bean>
+		</mvc:interceptor>
 	</mvc:interceptors>
 
 

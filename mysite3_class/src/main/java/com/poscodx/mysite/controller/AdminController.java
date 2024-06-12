@@ -25,8 +25,8 @@ public class AdminController {
 	@Autowired
 	private ServletContext servletContext;
 	
-	@Autowired
-	private ApplicationContext applicationContext;
+//	@Autowired
+//	private ApplicationContext applicationContext;
 	
 	@Autowired
 	private SiteService siteService;
@@ -49,7 +49,7 @@ public class AdminController {
 	public String update(SiteVo vo, @RequestParam(value="file") MultipartFile file) {
 		
 		String profile = fileuploadService.restore(file);
-		if(profile != null) {
+		if(profile != null) {		// 사용자가 파일 업로드를 안할 경우, 기존의 정보를 불러옴(null로 수정되는 것을 막기 위해)
 			vo.setProfile(profile);
 		}
 
