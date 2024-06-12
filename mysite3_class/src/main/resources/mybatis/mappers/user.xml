@@ -32,11 +32,11 @@
 		]]>
 	</select>
 	
-	<select id="findByEmail" parameterType="String" resultType="uservo">
+	<select id="findByEmail" parameterType="string" resultType="uservo">
 		<![CDATA[
 			select no, name, email, gender 
 			from user 
-			where no = #{email }
+			where email = #{email }
 		]]>
 	</select>
 	
