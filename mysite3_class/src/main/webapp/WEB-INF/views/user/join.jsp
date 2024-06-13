@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -50,14 +51,22 @@ $(function() {
 				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user/join">
 					<input type='hidden' name="a" value="join">
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="">
-
+					<input id="name" name="name" type="text" value="${UserVo.name }">
+					<spring:hasBindErrors name="userVo">
+					<p style="text-align:left; padding:0">
+						<c:if test="${errors.hasFieldErrors('name')}">
+							<!-- default message -->
+							${errors.getFieldError("name").defaultMessage }
+						</c:if>
+					</spring:hasBindErrors>
 					<label class="block-label" for="email">이메일</label>
 					<input id="email" name="email" type="text" value="">
 					<input id ="btn-check" type="button" value="이메일확인">
 					<img id="img-check" src="${pageContext.request.contextPath}/assets/images/check.jpg" style="vertical-align:bottom; width:24px; height:24px; display:none">
 					
-					<label class="block-label">패스워드</label>
+					<label class="block-label">
+					<spring:message code="user.join.label.password" />
+					</label>
 					<input name="password" type="password" value="">
 					
 					<fieldset>

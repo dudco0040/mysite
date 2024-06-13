@@ -1,10 +1,14 @@
 package com.poscodx.mysite.controller;
 
-import javax.servlet.http.HttpSession;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,8 +30,25 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String join(UserVo vo) {
-		userService.join(vo);
+	public String join(@ModelAttribute @Valid UserVo vo, BindingResult result, Model model) {
+		// model.addAttribute("userVo", vo);
+		
+		
+		if(result.hasErrors()) {  // 에러가 있는지 확인. 에러가 있을 경우 다시 join form으로 이동 
+//			List<ObjectError> list = result.getAllErrors();
+//			for(ObjectError error: list) {
+//				System.out.println(error);
+//			}
+			
+			Map<String, Object>map = result.getModel();
+			
+			model.addAllAttributes(map);  // map.key에 errors가 존재 
+
+			return "user/join";
+		}
+		
+		// validation이 성공하면 실행 
+		//userService.join(vo);
 		return "redirect:/user/joinsuccess";
 	}
 	
