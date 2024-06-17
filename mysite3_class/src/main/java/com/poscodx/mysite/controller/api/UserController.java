@@ -20,9 +20,6 @@ public class UserController {
 	public JsonResult checkEmail(@RequestParam(value="email", required=true, defaultValue="") String email) {
 		UserVo vo = userService.getUser(email);
 		
-		JsonResult jsonResult = new JsonResult();
-		jsonResult.setResult("ok");
-		
-		return jsonResult;
+		return JsonResult.success(vo != null);
 	}
 }
