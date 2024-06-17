@@ -4,7 +4,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div id="header">
-	<h1>${sitevo.title }</h1>
+	<h1>
+	<!-- ${sitevo.title } -->
+	${site.title}
+	</h1>
 	<ul>
 		<c:choose>
 			<c:when test='${empty authUser }'>

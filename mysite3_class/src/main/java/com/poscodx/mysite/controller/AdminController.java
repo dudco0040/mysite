@@ -2,6 +2,7 @@ package com.poscodx.mysite.controller;
 
 import javax.servlet.ServletContext;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -25,8 +26,8 @@ public class AdminController {
 	@Autowired
 	private ServletContext servletContext;
 	
-//	@Autowired
-//	private ApplicationContext applicationContext;
+	@Autowired
+	private ApplicationContext applicationContext;
 	
 	@Autowired
 	private SiteService siteService;
@@ -40,6 +41,14 @@ public class AdminController {
 		SiteVo vo = siteService.getProfile();
 		
 		model.addAttribute("siteVo", vo);
+		
+		SiteVo site = applicationContext.getBean(SiteVo.class);
+		// Properties를 수정
+//		site.setTitle(vo.getTitle());
+//		site.setWelcome(vo.getWelcome());
+//		site.setProfile(vo.getProfile());
+//		site.setDescription(vo.getDescription());
+		BeanUtils.copyProperties(vo, site);
 		
 		return "admin/main";
 	}
