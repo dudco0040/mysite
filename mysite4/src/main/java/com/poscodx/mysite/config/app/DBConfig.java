@@ -14,7 +14,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionManager;
 
 @Configuration
-@PropertySource("classpath:com/poscodx/mysite/app/jdbc.properties")
+@PropertySource("classpath:com/poscodx/mysite/config/app/jdbc.properties")
 public class DBConfig {
 	
 	@Autowired

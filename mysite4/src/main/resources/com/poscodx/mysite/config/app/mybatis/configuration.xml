@@ -8,9 +8,9 @@
 		<typeAlias type="com.poscodx.mysite.vo.SiteVo" alias="sitevo"/>
 	</typeAliases>
 	<mappers>
-		<mapper resource="com/poscodx/mysite/app/mybatis/mappers/guestbook.xml" />
-		<mapper resource="com/poscodx/mysite/app/mybatis/mappers/user.xml" />
-		<mapper resource="com/poscodx/mysite/app/mybatis/mappers/board.xml" />
-		<mapper resource="com/poscodx/mysite/app/mybatis/mappers/site.xml" />
+		<mapper resource="com/poscodx/mysite/config/app/mybatis/mappers/guestbook.xml" />
+		<mapper resource="com/poscodx/mysite/config/app/mybatis/mappers/user.xml" />
+		<mapper resource="com/poscodx/mysite/config/app/mybatis/mappers/board.xml" />
+		<mapper resource="com/poscodx/mysite/config/app/mybatis/mappers/site.xml" />
 	</mappers>
 </configuration>

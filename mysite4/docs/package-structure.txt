@@ -20,7 +20,7 @@
 [src/main/resources]
 	com
 	 |--- poscodx
-	 |		|--- mysite
+	 |		|--- mysite ! config 추가
 	 |		|		|--- app
 	 |		|		|	  |--- jdbc.properties
 	 |		|		|	  |--- mybatis

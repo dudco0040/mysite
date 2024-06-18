@@ -10,6 +10,7 @@
 		<module>mysite2</module>
 		<module>mysite3</module>
 		<module>mysite3_class</module>
+		<module>mysite4</module>
 	</modules>
 	<build>
 		<plugins>
