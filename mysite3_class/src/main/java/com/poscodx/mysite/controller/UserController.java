@@ -25,7 +25,7 @@ public class UserController {
 	
 	// 회원 가입
 	@RequestMapping(value="/join", method=RequestMethod.GET)
-	public String join() {
+	public String join(@ModelAttribute UserVo vo) {
 		return "user/join";
 	}
 	
