@@ -5,7 +5,7 @@
 <script src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
 <script>
 $(function(){
-	$("language a").click(function(){
+	$("#languages a").click(function(){
 		event.preventDefault();
 		console.log($(this).data("lang"));
 		
