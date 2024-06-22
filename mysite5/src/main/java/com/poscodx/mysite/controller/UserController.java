@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,7 +49,7 @@ public class UserController {
 		}
 		
 		// validation이 성공하면 실행 
-		//userService.join(vo);
+		userService.join(vo);
 		return "redirect:/user/joinsuccess";
 	}
 	
@@ -67,8 +68,14 @@ public class UserController {
 	// 정보 수정
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.GET)
-	public String update(@AuthUser UserVo authUser, Model model) {
-
+	public String update(Authentication authentication, Model model) {
+		
+		// Thread Local : SecurityContextHolder(Spring Security ThreadLocal Helper Class)
+		// SecurityContext sc = SecurityContextHolder.getContext();
+		
+		// HttpSession 기반
+		
+		UserVo authUser = (UserVo)authentication.getPrincipal();
 		UserVo vo = userService.getUser(authUser.getNo());
 		model.addAttribute("userVo", vo);
 

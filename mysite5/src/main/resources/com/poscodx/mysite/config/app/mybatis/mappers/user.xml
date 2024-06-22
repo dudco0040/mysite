@@ -6,7 +6,7 @@
 		<![CDATA[
 			insert 
 			into user 
-			values(null, #{name }, #{email }, password(#{password }), #{gender }, current_date(), "USER")
+			values(null, #{name }, #{email }, #{password }, #{gender }, current_date(), "USER")
 		]]>
 	
 		<selectKey keyProperty="no" resultType="long" order="AFTER">
@@ -40,6 +40,14 @@
 		]]>
 	</select>
 	
+	<select id="findByEmail2" parameterType="string" resultType="uservo">
+		<![CDATA[
+			select no, name, email, paaword, role 
+			from user 
+			where email = #{email }
+		]]>
+	</select>
+	
 	<update id="update" parameterType="uservo">
 	
 	
@@ -54,7 +62,7 @@
 			<otherwise>
 				<![CDATA[
 				update user 
-				set name = #{name}, password = password(#{password}) 
+				set name = #{name}, password = #{password}
 				where no = #{no}
 				]]>
 			</otherwise>
