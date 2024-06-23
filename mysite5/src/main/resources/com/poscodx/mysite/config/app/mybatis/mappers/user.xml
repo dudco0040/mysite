@@ -40,17 +40,15 @@
 		]]>
 	</select>
 	
-	<select id="findByEmail2" parameterType="string" resultType="uservo">
+	<select id="findByEmail2" parameterType="string" resultType="userdetails">
 		<![CDATA[
-			select no, name, email, paaword, role 
+			select no, name, email, password, role 
 			from user 
 			where email = #{email }
 		]]>
 	</select>
 	
 	<update id="update" parameterType="uservo">
-	
-	
 		<choose>
 			<when test="">
 				<![CDATA[

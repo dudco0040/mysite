@@ -36,7 +36,9 @@ public class UserService {
 	}
 	
 	public void update(UserVo vo) {
+		System.out.println("service -> encoding   ");
 		vo.setPassword(vo.getPassword().equals("") ? "":passwordEncoder.encode(vo.getPassword()));
+		System.out.println("## vo: " + vo);
 		userRepository.update(vo);
 	}
 		

@@ -57,7 +57,7 @@ public class SecurityConfig {
    		.authorizeHttpRequests(registry -> {
    			registry
    				/* ACL */
-   				.requestMatchers(new RegexRequestMatcher("^/admin/$", null))
+   				.requestMatchers(new RegexRequestMatcher("^/admin/?.*$", null))
 				.hasAnyRole("ADMIN")
 				
 				.requestMatchers(new RegexRequestMatcher("^/board/update/?(write|reply|delete|modify)?/.*$", null))
@@ -67,9 +67,8 @@ public class SecurityConfig {
    				.hasAnyRole("ADMIN", "USER")
    				
    				
-
    				.anyRequest()
-   	       		.permitAll();
+       		.permitAll();
 		});
 //    	.exceptionHandling(exceptionHandlingConfigurer -> {
 //    		exceptionHandlingConfigurer.accessDeniedPage("/WEB-INF/views/error/403.jsp");
@@ -96,7 +95,6 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
     	return new UserDatailsServiceImpl();
-    	
-   
+
     }
 }

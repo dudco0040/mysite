@@ -36,11 +36,11 @@ public class UserRepository {
 
 	//UserDatailsServiceImpl
 	public UserDetailsImpl findByEmail2(String email) {
-		return sqlSession.selectOne("user.findByNo2", email);
+		return sqlSession.selectOne("user.findByEmail2", email);
 	}
 	
 	public int update(UserVo vo) {	
-		return sqlSession.selectOne("user.udate", vo);
+		return sqlSession.selectOne("user.update", vo);
 
 	}
 

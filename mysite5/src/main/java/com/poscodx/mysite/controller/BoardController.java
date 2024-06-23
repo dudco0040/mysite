@@ -3,6 +3,7 @@ package com.poscodx.mysite.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -107,17 +108,20 @@ public class BoardController {
 	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)	
 	public String write(
-		@AuthUser UserVo authUser,
+		Authentication authentication,
 		@ModelAttribute BoardVo boardVo,
 		@RequestParam(value="p", required=true, defaultValue="1") Integer page,
 		@RequestParam(value="kwd", required=true, defaultValue="") String keyword) {
 
 		//UserVo authUser = (UserVo)session.getAttribute("authUser");
+
+		UserVo authUser = (UserVo)authentication.getPrincipal();
 		if(authUser == null) {
 			return "redirect:/";
 		}
 		
 		boardVo.setUserNo(authUser.getNo());
+		System.out.println("check: " + boardVo);
 		boardService.addContents(boardVo);
 		
 		return	"redirect:/board?p=" + page + "&kwd=" + WebUtil.encodeURL(keyword, "UTF-8");

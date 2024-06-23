@@ -70,13 +70,18 @@ public class UserController {
 	@RequestMapping(value="/update", method=RequestMethod.GET)
 	public String update(Authentication authentication, Model model) {
 		
-		// Thread Local : SecurityContextHolder(Spring Security ThreadLocal Helper Class)
-		// SecurityContext sc = SecurityContextHolder.getContext();
-		
-		// HttpSession 기반
+//      1. SecurityContextHolder(Spring Security ThreadLocal Helper Class) 기반		
+//		SecurityContext sc = SecurityContextHolder.getContext();
+//		Authentication authentication = sc.getAuthentication();
+
+//      2. HttpSession 기반		
+//		SecurityContext sc = (SecurityContext)session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY)
+//		Authentication authentication = sc.getAuthentication();
 		
 		UserVo authUser = (UserVo)authentication.getPrincipal();
+		//System.out.println("## update: " + authUser);
 		UserVo vo = userService.getUser(authUser.getNo());
+		System.out.println("## auth: " + authUser + ", vo: " + vo);
 		model.addAttribute("userVo", vo);
 
 		return "user/update";
@@ -84,15 +89,18 @@ public class UserController {
 	
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String update(@AuthUser UserVo authUser, UserVo vo) {
+	public String update(Authentication authentication, UserVo vo) {
 
 //		UserVo authUser = (UserVo)session.getAttribute("authUser");
 //		if(authUser==null) {
 //			return "redirect:/";   // 비정상적인 접근
 //		}
 		////////////////////// 보안 - 횡단 관심
-
+		
+		UserVo authUser = (UserVo)authentication.getPrincipal();
 		vo.setNo(authUser.getNo());
+		System.out.println("## update: " + vo);
+		
 		userService.update(vo);
 		
 		authUser.setName(vo.getName());
