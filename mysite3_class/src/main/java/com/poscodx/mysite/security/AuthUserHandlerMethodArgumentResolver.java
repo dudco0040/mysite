@@ -19,12 +19,12 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 		AuthUser authUser = parameter.getParameterAnnotation(AuthUser.class);
 		
 		// @AuthUsert가 안 붙어 있다면
-		if(authUser==null) {
+		if(authUser == null) {
 			return false;
 		}
 		
 		// 파라미터 타입이 UserVo가 아니면 (타입 체크) 
-		if(parameter.getParameterType().equals(UserVo.class)) {
+		if(!parameter.getParameterType().equals(UserVo.class)) {
 			return false;
 		}
 		
@@ -33,19 +33,19 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 
 	@Override
 	public Object resolveArgument(
-			MethodParameter parameter, 
-			ModelAndViewContainer mavContainer,
-			NativeWebRequest webRequest,  // 
-			WebDataBinderFactory binderFactory) throws Exception {
+		MethodParameter parameter,
+		ModelAndViewContainer mavContainer,
+		NativeWebRequest webRequest,
+		WebDataBinderFactory binderFactory) throws Exception {
 		
-			if(!supportsParameter(parameter)) {
-				return WebArgumentResolver.UNRESOLVED;
-			}
-			
-			HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest(); // tomcat
-			HttpSession session= request.getSession();
-			
-			return session.getAttribute("authUser");
+		if(!supportsParameter(parameter)) {
+			return WebArgumentResolver.UNRESOLVED;
+		}
+		
+		HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest();
+		HttpSession session = request.getSession();
+		
+		return session.getAttribute("authUser");
 	}
 
 }
