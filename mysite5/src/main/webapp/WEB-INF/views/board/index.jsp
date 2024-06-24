@@ -48,14 +48,12 @@
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<td>
-								<c:choose>
-									<c:when test="${not empty authUser && authUser.no == vo.userNo }">
+								<sec:authorize access="isAuthenticated()">
+								<sec:authentication property="principal" var="authUser"/>
+								<c:if test="${authUser.no == vo.userNo }">
 										<a href="${pageContext.request.contextPath }/board/delete/${vo.no }?p=${map.currentPage }&kwd=${map.keyword }" class="del" style="background-image:url(${pageContext.request.contextPath }/assets/images/recycle.png)">삭제</a>
-									</c:when>
-									<c:otherwise>
-										&nbsp;
-									</c:otherwise>
-								</c:choose>
+								</c:if>
+								</sec:authorize>
 							</td>
 						</tr>
 					</c:forEach>

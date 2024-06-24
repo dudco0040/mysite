@@ -32,7 +32,7 @@ public class UserService {
 	}
 	
 	public UserVo getUser(String eamil) {
-		return userRepository.findByEmail(eamil);
+		return userRepository.findByEmail(eamil, UserVo.class);
 	}
 	
 	public void update(UserVo vo) {

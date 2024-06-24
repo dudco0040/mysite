@@ -59,7 +59,7 @@ public class UserController {
 	}
 	
 	// 로그인
-	@RequestMapping(value= "/login", method=RequestMethod.GET)
+	@RequestMapping(value= "/login")
 	public String login() {
 		return "user/login";
 	}

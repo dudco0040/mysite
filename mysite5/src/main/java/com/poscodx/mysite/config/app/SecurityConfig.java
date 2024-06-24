@@ -1,20 +1,26 @@
 package com.poscodx.mysite.config.app;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
@@ -48,7 +54,19 @@ public class SecurityConfig {
    		.loginProcessingUrl("/user/auth")
    		.usernameParameter("email")
    		.passwordParameter("password")
-   		.failureUrl("/user/login?result=fail")
+   		// .failureUrl("/user/login?result=fail")
+   		.failureHandler(new AuthenticationFailureHandler() {
+
+			@Override
+			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+					AuthenticationException exception) throws IOException, ServletException {
+				request.setAttribute("email", request.getParameter("email"));
+				request
+					.getRequestDispatcher("/user/login")
+					.forward(request, response);
+			}
+		})
+   		
    		.and()
    		
    		.csrf()
@@ -89,7 +107,7 @@ public class SecurityConfig {
     
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-    	return new BCryptPasswordEncoder(16);
+    	return new BCryptPasswordEncoder(4 /* 4~31 */);
     }
     
     @Bean
