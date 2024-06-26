@@ -7,9 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>Not Found(404): Custom</h1>
+	<h1>Bad Request(404): Custom</h1>
 	<p>
-		요청을 찾을 수 없습니다.
+		잘못된 요청입니다.
 	</p>
 </body>
 </html>

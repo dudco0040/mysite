@@ -9,10 +9,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>Internal Server Error(500): custom</h1>
+	<h1>Unknown: custom</h1>
 	<hr>
-	<pre style="color: #fe1100">
-${error }
+	?
 	</pre>
 </body>
 </html>
