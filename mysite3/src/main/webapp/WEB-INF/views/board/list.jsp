@@ -129,9 +129,7 @@
 				<!-- 회원인 경우만 bottom을 표시 -->
 				<c:if test="${not empty authUser}">
 					<div class="bottom">
-						<a
-							href="${pageContext.request.contextPath}/board/write"
-							method="post" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/write" method="post" id="new-book">글쓰기</a>
 					</div>
 				</c:if>
 			</div>

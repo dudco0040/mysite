@@ -119,50 +119,7 @@ public class BoardRepository {
 	
 	// 답글 달기 
 	public int reply(BoardVo vo) {
-
-		return sqlSession.insert("board.reply", vo);
-//		int result = 0;
-//		
-//		// vo로 받은 값을 update
-//		 Long UpdateGNo = vo.getgNo();
-//		 Long UpdateONo = vo.getoNo()+1;
-//		 Long UpdateDepth = vo.getDepth()+1;
-//		
-//		try (
-//			Connection conn = getConnection();
-//			PreparedStatement pstmt = conn.prepareStatement("update board set o_no=o_no+1 where g_no=? and o_no>?");
-//			
-//			PreparedStatement pstmt1 = conn.prepareStatement("insert into board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) values(?, ?, 0, now(), ?, ?, ?, ?)");
-//			PreparedStatement pstmt2 = conn.prepareStatement("select last_insert_id() from dual");
-//			) {
-//
-//			System.out.println("[Dao vo] " + vo.getTitle() + vo.getContents() + vo.getgNo() + vo.getUserNo());
-//			// binding
-//			// param 작성한 제목과 글
-//			// update
-//			// pstmt.setLong(1, vo.getoNo());
-//			pstmt.setLong(1, vo.getgNo());
-//			pstmt.setLong(2, vo.getoNo());
-//			
-//			// insert
-//			pstmt1.setString(1, vo.getTitle());
-//			pstmt1.setString(2, vo.getContents());
-//			pstmt1.setLong(3, UpdateGNo);
-//			pstmt1.setLong(4, UpdateONo);
-//			pstmt1.setLong(5, UpdateDepth);
-//			pstmt1.setLong(6, vo.getUserNo());
-//
-//			result = pstmt.executeUpdate();
-//			result = pstmt1.executeUpdate();
-//
-//			ResultSet rs = pstmt2.executeQuery();
-//			vo.setNo(rs.next() ? rs.getLong(1) : null);
-//			rs.close();
-//		} catch (SQLException e) {
-//			System.out.println("Error:" + e);
-//		}
-//
-//		return result;
+		return sqlSession.insert("board.reply", vo);   // Map.of를 사용하지 않고 전달 !! 
 	}
 	
 	// 조회수

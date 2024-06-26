@@ -42,7 +42,7 @@
 							    <input type="hidden" name="title" value="${vo.title}" />
 							    <input type="hidden" name="contents" value="${vo.contents}" />
 						</c:if>
-						<a href="${pageContext.request.contextPath}/board/write/reply=TRUE/${vo.no}" method="post" id="new-book">답글달기</a>	<!-- &reply=TRUE -->
+						<a href="${pageContext.request.contextPath}/board/write/${vo.no}" method="post" id="new-book">답글달기</a>	<!-- &reply=TRUE -->
 					</c:if>
 				</div>
 			</div>

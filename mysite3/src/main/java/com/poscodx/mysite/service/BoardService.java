@@ -50,6 +50,10 @@ public class BoardService {
 	}
 	
 	// 답글 쓰기(reply)
+	public void replyUpdate(Long gNo, Long oNo) {
+		boardRepository.replyUpdate(gNo, oNo);
+	}
+	
 	public void reply(BoardVo vo) {
 		boardRepository.reply(vo);
 	}
