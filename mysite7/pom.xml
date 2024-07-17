@@ -53,7 +53,6 @@
 		</dependency>
 
 
-
 		<!-- Spring Boot Test Integration -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -68,13 +67,24 @@
 			<version>2.2.0</version>
 		</dependency>
 		
+		<!-- Thymeleaf Stater -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		
+		<!-- Spring security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+		</dependency>
+		
 		<!-- mariadb jdbc -->
 		<dependency>
 		    <groupId>org.mariadb.jdbc</groupId>
 		    <artifactId>mariadb-java-client</artifactId>
-		    <version>3.2.0</version>
 		</dependency>
-
+		
 		<!-- common fileupload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -85,12 +95,6 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.11.0</version>
-		</dependency>
-		
-		<!-- Spring security -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 		
 		<!-- JSTL -->
@@ -105,8 +109,6 @@
 		    <artifactId>tomcat-embed-jasper</artifactId>
 		    <scope>provided</scope>
 		</dependency>
-		
-
 	</dependencies>
 	
 	<build>
